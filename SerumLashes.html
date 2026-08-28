@@ -29,7 +29,7 @@
       .dc-ship > div[style*="grid"] { grid-template-columns: 1fr !important; }
       [data-photos] { height: auto !important; }
       [data-photos-pin] { position: relative !important; height: auto !important; overflow: visible !important; padding: 132px 0 72px !important; }
-      [data-photos-track] { position: relative !important; height: auto !important; padding: 0 14vw !important; gap: 18px !important; transform: none !important; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-snap-stop: always; scrollbar-width: none; touch-action: pan-x pan-y; -webkit-overflow-scrolling: auto; overscroll-behavior-x: contain; }
+      [data-photos-track] { position: relative !important; height: auto !important; padding: 0 14vw !important; gap: 18px !important; transform: none !important; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; scroll-snap-stop: normal; scrollbar-width: none; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
       [data-photos-track]::-webkit-scrollbar { display: none; }
       [data-pcard] { opacity: 1 !important; transform: none !important; scroll-snap-align: center; scroll-snap-stop: always; width: 72vw !important; height: 96vw !important; }
       /* la foto no debe capturar el gesto: el swipe se hace sobre la imagen */
@@ -55,8 +55,8 @@
       .dc-intro { top: 39.5% !important; }
       .dc-intro-p { font-size: 15px !important; max-width: 280px !important; }
       /* recorridos más cortos: en móvil el mismo largo se siente eterno */
-      .dc-rig { height: calc(100dvh + 175dvh) !important; }
-      .dc-rig .stage { height: 100dvh !important; }
+      .dc-rig { height: calc(100svh + 175svh) !important; }
+      .dc-rig .stage { height: 100svh !important; }
       .dc-routine { height: 275svh !important; }
       [data-hcard] { width: min(300px, 84vw) !important; }
       /* Producto más protagonista y mejor centrado en móvil. */
@@ -565,25 +565,10 @@ class Component extends DCLogic {
   }
 
   installScrollBrake() {
-    if (window.innerWidth > 860) return;
-    const root = document.scrollingElement || document.documentElement;
-    const MAX = 22; // px por frame tras soltar el dedo
-    let braking = false, last = 0, raf = 0;
-    const stop = () => { braking = false; if (raf) cancelAnimationFrame(raf); raf = 0; };
-    const tick = () => {
-      if (!braking) return;
-      const y = root.scrollTop;
-      const d = y - last;
-      if (Math.abs(d) > MAX) { root.scrollTop = last + Math.sign(d) * MAX; }
-      last = root.scrollTop;
-      raf = requestAnimationFrame(tick);
-    };
-    this._brakeOn = () => { stop(); braking = false; };
-    const onStart = () => { stop(); };
-    const onEnd = () => { braking = true; last = root.scrollTop; raf = requestAnimationFrame(tick); setTimeout(stop, 1400); };
-    window.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('touchend', onEnd, { passive: true });
-    this._brakeCleanup = () => { stop(); window.removeEventListener('touchstart', onStart); window.removeEventListener('touchend', onEnd); };
+    // En móvil dejamos intacta la inercia nativa. La versión anterior
+    // reescribía scrollTop durante 1.4 s después de touchend y peleaba con
+    // el momentum de iOS/Android, provocando pequeños tirones al soltar.
+    this._brakeCleanup = null;
   }
 
   componentDidMount() {
@@ -639,6 +624,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     this.running = false;
     if (this._brakeCleanup) this._brakeCleanup();
+    if (this._routineSnapObserver) this._routineSnapObserver.disconnect();
     if (this.raf) cancelAnimationFrame(this.raf);
     clearTimeout(this._resizeT);
     window.removeEventListener('mousemove', this.onMove);
@@ -768,9 +754,14 @@ class Component extends DCLogic {
     this.routineGroups = [];
     this.buildLashes();
 
-    // Snap suave: cada gesto de scroll aterriza en el siguiente paso.
-    if (!this.reduced && 'IntersectionObserver' in window) {
-      const root = document.scrollingElement || document.documentElement;
+    // En escritorio conservamos el snap suave de la rutina. En móvil se
+    // desactiva: CSS scroll-snap + scroll-behavior:smooth interfiere con el
+    // momentum táctil y con las secciones sticky.
+    const root = document.scrollingElement || document.documentElement;
+    if (window.innerWidth <= 860) {
+      root.style.scrollSnapType = '';
+      root.style.scrollBehavior = '';
+    } else if (!this.reduced && 'IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
           root.style.scrollSnapType = e.isIntersecting ? 'y proximity' : '';
@@ -778,6 +769,7 @@ class Component extends DCLogic {
         });
       }, { rootMargin: '-10% 0px -10% 0px' });
       io.observe(section);
+      this._routineSnapObserver = io;
     }
 
     if (this.reduced) {
@@ -898,7 +890,7 @@ class Component extends DCLogic {
       if (panel._op !== opS) { panel._op = opS; panel.style.opacity = opS; }
       const trS = 'translate3d(' + y.toFixed(1) + 'px, -50%, 0)';
       if (panel._tr !== trS) { panel._tr = trS; panel.style.transform = trS; }
-      const blS = (op < 0.02 || blur < 0.2) ? 'none' : 'blur(' + blur.toFixed(1) + 'px)';
+      const blS = (window.innerWidth <= 860 || op < 0.02 || blur < 0.2) ? 'none' : 'blur(' + blur.toFixed(1) + 'px)';
       if (panel._bl !== blS) { panel._bl = blS; panel.style.filter = blS; }
 
       const nOpS = nOp.toFixed(3);
@@ -1047,6 +1039,7 @@ class Component extends DCLogic {
     if (this.hairTween) { this.hairTween.scrollTrigger && this.hairTween.scrollTrigger.kill(); this.hairTween.kill(); }
     this.gsapReady = true;
     gsap.registerPlugin(ScrollTrigger);
+    if (window.innerWidth <= 860 && ScrollTrigger.config) ScrollTrigger.config({ ignoreMobileResize: true });
     this.hairTween = gsap.to(this.hairTrack, {
       x: () => -this.hairTravel,
       ease: 'none',
