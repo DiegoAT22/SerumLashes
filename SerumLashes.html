@@ -1,485 +1,1099 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./support.js"></script>
 </head>
+
 <body>
-<x-dc>
-<helmet>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <script src="./image-slot.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Prata&display=swap" rel="stylesheet" />
-  <style>
-    @property --mix { syntax: '<number>'; initial-value: 0; inherits: true; }
-    html { overflow-x: hidden; }
-    body { margin: 0; padding: 0; background: #0B1110; }
-    * { box-sizing: border-box; }
-    ::selection { background: #C9A15A; color: #111411; }
-    @keyframes dcRise { from { opacity: 0; transform: translate3d(0, 34px, 0); } to { opacity: 1; transform: none; } }
-    @media (max-width: 860px) {
-      .dc-ship { padding: 32px 26px !important; gap: 14px !important; }
-      .dc-ship p { font-size: 14px !important; }
-      .dc-ship > div[style*="grid"] { grid-template-columns: 1fr !important; }
-      [data-photos] { height: auto !important; }
-      [data-photos-pin] { position: relative !important; height: auto !important; overflow: visible !important; padding: 132px 0 72px !important; }
-      [data-photos-track] { position: relative !important; height: auto !important; padding: 0 14vw !important; gap: 18px !important; transform: none !important; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; scroll-snap-stop: normal; scrollbar-width: none; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
-      [data-photos-track]::-webkit-scrollbar { display: none; }
-      [data-pcard] { opacity: 1 !important; transform: none !important; scroll-snap-align: center; scroll-snap-stop: always; width: 72vw !important; height: 96vw !important; }
-      /* la foto no debe capturar el gesto: el swipe se hace sobre la imagen */
-      [data-pcard] image-slot { pointer-events: none !important; touch-action: pan-x pan-y !important; }
-    }
-    image-slot:not([data-map])::part(frame) { background: transparent !important; }
-    image-slot:not([data-map])::part(ring) { display: none !important; }
-    @keyframes palm-sway-left { 0%, 100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(1.1vw) rotate(0.6deg); } }
-    @keyframes palm-sway-right { 0%, 100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(-1.3vw) rotate(-0.5deg); } }
-    /* ═══ MÓVIL ═══ */
-    @media (max-width: 860px) {
-      /* Palmas de hero: más grandes, apoyadas en las esquinas y ancladas abajo.
+  <x-dc>
+    <helmet>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+      <script src="./image-slot.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&display=swap"
+        rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Prata&display=swap" rel="stylesheet" />
+      <style>
+        @property --mix {
+          syntax: '<number>';
+          initial-value: 0;
+          inherits: true;
+        }
+
+        html {
+          overflow-x: hidden;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+          background: #0B1110;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        ::selection {
+          background: #C9A15A;
+          color: #111411;
+        }
+
+        @keyframes dcRise {
+          from {
+            opacity: 0;
+            transform: translate3d(0, 34px, 0);
+          }
+
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+
+        @media (max-width: 860px) {
+          .dc-ship {
+            padding: 32px 26px !important;
+            gap: 14px !important;
+          }
+
+          .dc-ship p {
+            font-size: 14px !important;
+          }
+
+          .dc-ship>div[style*="grid"] {
+            grid-template-columns: 1fr !important;
+          }
+
+          [data-photos] {
+            height: auto !important;
+          }
+
+          [data-photos-pin] {
+            position: relative !important;
+            height: auto !important;
+            overflow: visible !important;
+            padding: 132px 0 72px !important;
+          }
+
+          [data-photos-track] {
+            position: relative !important;
+            height: auto !important;
+            padding: 0 14vw !important;
+            gap: 18px !important;
+            transform: none !important;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-snap-stop: always;
+            scrollbar-width: none;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: auto;
+            overscroll-behavior-x: contain;
+          }
+
+          [data-photos-track]::-webkit-scrollbar {
+            display: none;
+          }
+
+          [data-pcard] {
+            opacity: 1 !important;
+            transform: none !important;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+            width: 72vw !important;
+            height: 96vw !important;
+          }
+
+          /* la foto no debe capturar el gesto: el swipe se hace sobre la imagen */
+          [data-pcard] image-slot {
+            pointer-events: none !important;
+            touch-action: pan-x pan-y !important;
+          }
+        }
+
+        image-slot:not([data-map])::part(frame) {
+          background: transparent !important;
+        }
+
+        image-slot:not([data-map])::part(ring) {
+          display: none !important;
+        }
+
+        @keyframes palm-sway-left {
+
+          0%,
+          100% {
+            transform: translateX(0) rotate(0deg);
+          }
+
+          50% {
+            transform: translateX(1.1vw) rotate(0.6deg);
+          }
+        }
+
+        @keyframes palm-sway-right {
+
+          0%,
+          100% {
+            transform: translateX(0) rotate(0deg);
+          }
+
+          50% {
+            transform: translateX(-1.3vw) rotate(-0.5deg);
+          }
+        }
+
+        /* ═══ MÓVIL ═══ */
+        @media (max-width: 860px) {
+
+          /* Palmas de hero: más grandes, apoyadas en las esquinas y ancladas abajo.
          Así vuelven a enmarcar la escena en vez de verse flotando o perdidas. */
-      .palm-l { left: -34vw !important; width: 112vw !important; height: auto !important; aspect-ratio: 1400/933; bottom: -2svh !important; }
-      .palm-r { right: -26vw !important; width: 114vw !important; height: auto !important; aspect-ratio: 1400/933; bottom: -2svh !important; }
-      /* el vaivén se mide en px del ancho real, no en vw, para que no exagere al ampliar */
-      .palm-sway { animation-duration: 9s !important; }
-      html, body { touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; }
-      .dc-rig, .dc-rig * { touch-action: pan-y !important; }
-      .dc-rig .stage > * { pointer-events: none; }
-      .dc-rig .stage a, .dc-rig .stage button { pointer-events: auto; }
-      /* El copy sube un poco para respirar mejor entre cielo y mar. */
-      .dc-intro { top: 39.5% !important; }
-      .dc-intro-p { font-size: 15px !important; max-width: 280px !important; }
-      /* recorridos más cortos: en móvil el mismo largo se siente eterno */
-      .dc-rig { height: calc(100svh + 175svh) !important; }
-      .dc-rig .stage { height: 100svh !important; }
-      .dc-routine { height: 275svh !important; }
-      [data-hcard] { width: min(300px, 84vw) !important; }
-      /* Producto más protagonista y mejor centrado en móvil. */
-      .dc-tube { --tube-w: clamp(118px, 30vw, 156px) !important; top: 57% !important; left: 50.4% !important; }
-      .dc-word { transform: translateY(-16vh); }
-      .dc-lashes > div { margin-top: 5.2rem !important; letter-spacing: 0.42em !important; }
-      /* El numeral de fondo entra un poco más al canvas para que no se corte. */
-      [data-numeral] { font-size: clamp(8.2rem, 28vw, 10.8rem) !important; right: clamp(10px, 4vw, 22px) !important; top: 42% !important; line-height: 0.78 !important; }
-    }
-    @media (max-width: 430px) {
-      .palm-l { left: -36vw !important; width: 118vw !important; height: auto !important; aspect-ratio: 1400/933; bottom: -2svh !important; }
-      .palm-r { right: -28vw !important; width: 120vw !important; height: auto !important; aspect-ratio: 1400/933; bottom: -2svh !important; }
-      .dc-intro { top: 38.5% !important; }
-      .dc-intro-p { max-width: 268px !important; }
-      .dc-tube { --tube-w: clamp(126px, 33vw, 166px) !important; top: 58% !important; left: 50.5% !important; }
-      .dc-word { transform: translateY(-17vh); }
-      [data-numeral] { font-size: clamp(7.4rem, 26vw, 9rem) !important; right: 12px !important; }
-    }
-    @media (max-width: 860px) {
-      .dc-header { padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 0 !important; gap: 10px !important; }
-      .dc-header > * { min-width: 0; }
-      .dc-nav { display: none !important; }
-      .dc-cta { flex: 0 0 auto !important; padding: 7px 12px !important; font-size: 12px !important; white-space: nowrap !important; }
-      .dc-brand { flex: 1 1 auto !important; min-width: 0 !important; max-width: calc(100vw - 138px) !important; }
-      .dc-brand img { height: 40px !important; }
-      .dc-brand span { font-size: 14px !important; letter-spacing: 0.14em !important; white-space: nowrap !important; overflow: hidden; text-overflow: ellipsis; }
-    }
-    @media (max-width: 360px) {
-      .dc-header { padding-left: 12px !important; padding-right: 12px !important; }
-      .dc-brand img { height: 34px !important; }
-      .dc-brand span { font-size: 12px !important; letter-spacing: 0.12em !important; }
-      .dc-cta { padding: 6px 10px !important; font-size: 11px !important; gap: 6px !important; }
-      .dc-cta span { width: 7px !important; height: 7px !important; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      [style*="palm-sway"] , .palm-sway { animation: none !important; }
-      [data-hair] { margin-top: 0 !important; }
-    }
-  </style>
-</helmet>
+          .palm-l {
+            left: -34vw !important;
+            width: 112vw !important;
+            height: auto !important;
+            aspect-ratio: 1400/933;
+            bottom: -2svh !important;
+          }
 
-<div ref="{{ setRoot }}" style="position: relative; width: 100%; background: #0B1110; font-family: 'Manrope', sans-serif;">
+          .palm-r {
+            right: -26vw !important;
+            width: 114vw !important;
+            height: auto !important;
+            aspect-ratio: 1400/933;
+            bottom: -2svh !important;
+          }
 
-  <!-- HEADER -->
-  <header class="dc-header" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 18px 44px; pointer-events: none;">
-    <div class="dc-brand" style="display: flex; align-items: center; gap: 12px; pointer-events: auto;">
-      <img src="uploads/logolashes.png" alt="Serum Lashes" style="height: 52px; width: auto; display: block;">
-      <span style="font-family: 'Playfair Display', serif; font-size: 18px; letter-spacing: 0.12em; color: #000;">SERUM LASHES</span>
-    </div>
-    <nav class="dc-nav" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 32px; pointer-events: auto; background: rgba(0,0,0,0.94); backdrop-filter: blur(10px); border-radius: 999px; padding: 12px 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.18);">
-      <a href="#scroll-rig" style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;" style-hover="opacity: 1;">Inicio</a>
-      <a href="#aplicacion" style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;" style-hover="opacity: 1;">Aplicación</a>
-      <a href="#ciclo" style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;" style-hover="opacity: 1;">El ciclo</a>
-      <a href="#resultados" style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;" style-hover="opacity: 1;">Resultados</a>
-      <a href="#contacto" style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;" style-hover="opacity: 1;">Contacto</a>
-    </nav>
-    <a href="https://wa.me/5216691001838" target="_blank" rel="noopener" class="dc-cta" style="pointer-events: auto; display: flex; align-items: center; gap: 8px; border-radius: 999px; padding: 9px 18px; color: #000; text-decoration: none; font-size: 13px; letter-spacing: 0.03em; background: rgba(253,241,225,0.94); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.06);" style-hover="background: rgba(253,241,225,1);">
-      <span style="width: 8px; height: 8px; border-radius: 50%; background: #4B7A50; display: inline-block;"></span>
-      WhatsApp
-    </a>
-  </header>
+          /* el vaivén se mide en px del ancho real, no en vw, para que no exagere al ampliar */
+          .palm-sway {
+            animation-duration: 9s !important;
+          }
 
-  <!-- SCROLL RIG -->
-  <section id="scroll-rig" class="dc-rig" ref="{{ setSection }}" style="position: relative; height: calc(100vh + 270vh); background: #0B1110;">
-    <div class="stage" style="position: sticky; top: 0; height: 100vh; overflow: hidden;">
-      <div style="position: absolute; inset: 0; transform: translate3d(0, calc(var(--scene-up-y, 0) * 1px), 0); opacity: var(--scene-op, 1); will-change: transform, opacity;">
+          html,
+          body {
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
+          }
 
-      <!-- BG WRAPPER (blurs in act 3) -->
-      <div style="position: absolute; inset: 0;">
+          .dc-rig,
+          .dc-rig * {
+            touch-action: pan-y !important;
+          }
 
-        <!-- z0 sky -->
-        <div style="position: absolute; inset: -8vh -4vw; z-index: 0; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1px), calc((var(--sky-y, 0) + var(--ptr-bg-y, 0)) * 1px), 0) scale(1.12); will-change: transform;">
-          <image-slot id="sky" shape="rect" placeholder="sky.png — atardecer ámbar/teal" src="uploads/fondo_playero.webp" style="width: 100%; height: 100%;"></image-slot>
+          .dc-rig .stage>* {
+            pointer-events: none;
+          }
+
+          .dc-rig .stage a,
+          .dc-rig .stage button {
+            pointer-events: auto;
+          }
+
+          /* El copy sube un poco para respirar mejor entre cielo y mar. */
+          .dc-intro {
+            top: 39.5% !important;
+          }
+
+          .dc-intro-p {
+            font-size: 15px !important;
+            max-width: 280px !important;
+          }
+
+          /* recorridos más cortos: en móvil el mismo largo se siente eterno */
+          .dc-rig {
+            height: calc(100dvh + 220dvh) !important;
+          }
+
+          .dc-rig .stage {
+            height: 100dvh !important;
+          }
+
+          .dc-routine {
+            height: 275svh !important;
+          }
+
+          [data-hcard] {
+            width: min(300px, 84vw) !important;
+          }
+
+          /* Producto más protagonista y mejor centrado en móvil. */
+          .dc-tube {
+            --tube-w: clamp(118px, 30vw, 156px) !important;
+            top: 57% !important;
+            left: 50.4% !important;
+          }
+
+          .dc-word {
+            transform: translateY(-16vh);
+          }
+
+          .dc-lashes>div {
+            margin-top: 5.2rem !important;
+            letter-spacing: 0.42em !important;
+          }
+
+          /* El numeral de fondo entra un poco más al canvas para que no se corte. */
+          [data-numeral] {
+            font-size: clamp(8.2rem, 28vw, 10.8rem) !important;
+            right: clamp(10px, 4vw, 22px) !important;
+            top: 42% !important;
+            line-height: 0.78 !important;
+          }
+        }
+
+        @media (max-width: 430px) {
+          .palm-l {
+            left: -36vw !important;
+            width: 118vw !important;
+            height: auto !important;
+            aspect-ratio: 1400/933;
+            bottom: -2svh !important;
+          }
+
+          .palm-r {
+            right: -28vw !important;
+            width: 120vw !important;
+            height: auto !important;
+            aspect-ratio: 1400/933;
+            bottom: -2svh !important;
+          }
+
+          .dc-intro {
+            top: 38.5% !important;
+          }
+
+          .dc-intro-p {
+            max-width: 268px !important;
+          }
+
+          .dc-tube {
+            --tube-w: clamp(126px, 33vw, 166px) !important;
+            top: 58% !important;
+            left: 50.5% !important;
+          }
+
+          .dc-word {
+            transform: translateY(-17vh);
+          }
+
+          [data-numeral] {
+            font-size: clamp(7.4rem, 26vw, 9rem) !important;
+            right: 12px !important;
+          }
+        }
+
+        @media (max-width: 860px) {
+          .dc-header {
+            padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 10px !important;
+            gap: 10px !important;
+            align-items: center !important;
+            background: rgba(247, 246, 234, 0.96) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border-bottom: 1px solid rgba(75, 122, 80, 0.12) !important;
+            min-height: calc(env(safe-area-inset-top, 0px) + 76px) !important;
+          }
+
+          .dc-header>* {
+            min-width: 0;
+          }
+
+          .dc-nav {
+            display: none !important;
+          }
+
+          .dc-cta {
+            flex: 0 0 auto !important;
+            margin-left: 8px !important;
+            padding: 8px 12px !important;
+            font-size: 12px !important;
+            white-space: nowrap !important;
+            position: relative;
+            z-index: 2;
+          }
+
+          .dc-brand {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            max-width: calc(100vw - 156px) !important;
+            gap: 8px !important;
+            position: relative;
+            z-index: 2;
+          }
+
+          .dc-brand img {
+            height: 34px !important;
+            flex: 0 0 auto;
+          }
+
+          .dc-brand span {
+            font-size: 12px !important;
+            letter-spacing: 0.11em !important;
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          [data-hair] {
+            margin-top: -42svh !important;
+            z-index: 1 !important;
+          }
+
+          .dc-routine [data-stage],
+          [data-hair-pin],
+          [data-photos-pin] {
+            background: #F7F6EA !important;
+          }
+
+          [data-lashline] {
+            height: clamp(148px, 21vh, 190px) !important;
+            background: #F7F6EA !important;
+            display: block !important;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .dc-header {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+
+          .dc-brand {
+            max-width: calc(100vw - 148px) !important;
+          }
+
+          .dc-brand img {
+            height: 30px !important;
+          }
+
+          .dc-brand span {
+            font-size: 11px !important;
+            letter-spacing: 0.10em !important;
+          }
+
+          .dc-cta {
+            padding: 6px 10px !important;
+            font-size: 11px !important;
+            gap: 6px !important;
+          }
+
+          .dc-cta span {
+            width: 7px !important;
+            height: 7px !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+          [style*="palm-sway"],
+          .palm-sway {
+            animation: none !important;
+          }
+
+          [data-hair] {
+            margin-top: 0 !important;
+          }
+        }
+      </style>
+    </helmet>
+
+    <div ref="{{ setRoot }}"
+      style="position: relative; width: 100%; background: #0B1110; font-family: 'Manrope', sans-serif;">
+
+      <!-- HEADER -->
+      <header class="dc-header"
+        style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 18px 44px; pointer-events: none;">
+        <div class="dc-brand" style="display: flex; align-items: center; gap: 12px; pointer-events: auto;">
+          <img src="uploads/logolashes.png" alt="Serum Lashes" style="height: 52px; width: auto; display: block;">
+          <span
+            style="font-family: 'Playfair Display', serif; font-size: 18px; letter-spacing: 0.12em; color: #000;">SERUM
+            LASHES</span>
         </div>
+        <nav class="dc-nav"
+          style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 32px; pointer-events: auto; background: rgba(0,0,0,0.94); backdrop-filter: blur(10px); border-radius: 999px; padding: 12px 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.18);">
+          <a href="#scroll-rig"
+            style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;"
+            style-hover="opacity: 1;">Inicio</a>
+          <a href="#aplicacion"
+            style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;"
+            style-hover="opacity: 1;">Aplicación</a>
+          <a href="#ciclo"
+            style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;"
+            style-hover="opacity: 1;">El ciclo</a>
+          <a href="#resultados"
+            style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;"
+            style-hover="opacity: 1;">Resultados</a>
+          <a href="#contacto"
+            style="color: #FDF1E1; text-decoration: none; font-size: 14px; letter-spacing: 0.04em; opacity: 0.78;"
+            style-hover="opacity: 1;">Contacto</a>
+        </nav>
+        <a href="https://wa.me/5216691001838" target="_blank" rel="noopener" class="dc-cta"
+          style="pointer-events: auto; display: flex; align-items: center; gap: 8px; border-radius: 999px; padding: 9px 18px; color: #000; text-decoration: none; font-size: 13px; letter-spacing: 0.03em; background: rgba(253,241,225,0.94); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.06);"
+          style-hover="background: rgba(253,241,225,1);">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #4B7A50; display: inline-block;"></span>
+          WhatsApp
+        </a>
+      </header>
 
-        <!-- z1 clouds -->
-        <div style="position: absolute; inset: -10vh 0 0 0; height: 60vh; z-index: 1; transform: translate3d(calc(var(--ptr-bg-x, 0) * 0.8px), calc((var(--clouds-y, 0) + var(--ptr-bg-y, 0) * 0.8) * 1px), 0); will-change: transform;">
-          <image-slot id="clouds" shape="rect" placeholder="clouds.png — nubes (alfa)" src="uploads/cielo.webp" style="width: 100%; height: 100%;"></image-slot>
-        </div>
+      <!-- SCROLL RIG -->
+      <section id="scroll-rig" class="dc-rig" ref="{{ setSection }}"
+        style="position: relative; height: calc(100vh + 270vh); background: #0B1110;">
+        <div class="stage" style="position: sticky; top: 0; height: 100vh; overflow: hidden;">
+          <div
+            style="position: absolute; inset: 0; transform: translate3d(0, calc(var(--scene-up-y, 0) * 1px), 0); opacity: var(--scene-op, 1); will-change: transform, opacity;">
 
-        <!-- z3 palms -->
-        <div class="palm-l" style="position: absolute; left: min(-4vw, -20px); width: min(max(48vw, 560px), 800px); aspect-ratio: 1400/933; bottom: -1vh; z-index: 3; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1.4px), calc(var(--ptr-bg-y, 0) * 1.2 * 1px), 0); will-change: transform;">
-          <div class="palm-sway" style="width: 100%; height: 100%; animation: palm-sway-left 7.5s ease-in-out infinite; transform-origin: bottom center;">
-            <image-slot id="palms" shape="rect" fit="contain" placeholder="palmera izquierda — completa con rocas" src="uploads/palmera_izquierda.webp" style="width: 100%; height: 100%;"></image-slot>
-          </div>
-        </div>
+            <!-- BG WRAPPER (blurs in act 3) -->
+            <div style="position: absolute; inset: 0;">
 
-        <!-- z3d right palm layer -->
-        <div class="palm-r" style="position: absolute; right: min(-4vw, -20px); width: min(max(49vw, 580px), 810px); aspect-ratio: 1400/933; bottom: -1vh; z-index: 3; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1.5px), calc(var(--ptr-bg-y, 0) * 1.3 * 1px), 0); will-change: transform;">
-          <div class="palm-sway" style="width: 100%; height: 100%; animation: palm-sway-right 9s ease-in-out infinite; animation-delay: -3s; transform-origin: bottom center;">
-            <image-slot id="palms-right" shape="rect" fit="contain" placeholder="palmera derecha — completa con rocas" src="uploads/palmera_derecha.webp" style="width: 100%; height: 100%;"></image-slot>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- z4 word -->
-      <div class="dc-word" style="position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center; pointer-events: none;">
-        <h1 style="margin: 0; display: flex; align-items: baseline; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(4.5rem, 13vw, 14rem); color: #FDF1E1; line-height: 1; letter-spacing: -0.01em;">
-          <span class="word-left" style="display: inline-flex; transform: translate3d(calc(var(--word-left-x, 0) * 1vw), 0, 0); will-change: transform;">
-            <span style="opacity: var(--letter-op-0, 0); filter: blur(calc(var(--letter-blur-0, 8) * 1px)); transform: translateY(calc(var(--letter-ty-0, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">S</span>
-            <span style="opacity: var(--letter-op-1, 0); filter: blur(calc(var(--letter-blur-1, 8) * 1px)); transform: translateY(calc(var(--letter-ty-1, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">E</span>
-          </span>
-          <span style="display: inline-block; width: clamp(0.3rem, 0.9vw, 1rem);"></span>
-          <span class="word-right" style="display: inline-flex; transform: translate3d(calc(var(--word-right-x, 0) * 1vw), 0, 0); will-change: transform;">
-            <span style="opacity: var(--letter-op-2, 0); filter: blur(calc(var(--letter-blur-2, 8) * 1px)); transform: translateY(calc(var(--letter-ty-2, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">R</span>
-            <span style="opacity: var(--letter-op-3, 0); filter: blur(calc(var(--letter-blur-3, 8) * 1px)); transform: translateY(calc(var(--letter-ty-3, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">U</span>
-            <span style="opacity: var(--letter-op-4, 0); filter: blur(calc(var(--letter-blur-4, 8) * 1px)); transform: translateY(calc(var(--letter-ty-4, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">M</span>
-          </span>
-        </h1>
-      </div>
-
-      <!-- LASHES subtitle, reveals after SERUM settles -->
-      <div class="dc-word dc-lashes" style="position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center; pointer-events: none;">
-        <div style="margin-top: clamp(6.5rem, 16vw, 17rem); font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(1.6rem, 4.2vw, 4rem); letter-spacing: 0.55em; color: #FDF1E1; opacity: var(--lashes-op, 0); transform: translateY(calc(var(--lashes-y, 24) * 1px)); will-change: transform, opacity;">LASHES</div>
-      </div>
-
-      <!-- intro copy (act1) -->
-      <div class="dc-intro" style="position: absolute; left: 0; right: 0; top: 26%; z-index: 8; display: flex; justify-content: center; pointer-events: none; opacity: var(--intro-op, 1); transform: translateY(calc(var(--intro-y, 0) * 1px));">
-        <p class="dc-intro-p" style="max-width: 420px; text-align: center; color: #FDF1E1; text-shadow: 0 1px 14px rgba(8,34,44,0.45); font-size: 17px; line-height: 1.5; font-weight: 400; margin: 0; padding: 0 20px;">Una fórmula nacida del coco, para pestañas que crecen con la marea.</p>
-      </div>
-
-      <!-- scroll hint -->
-      <div style="position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); z-index: 8; color: rgba(253,241,225,0.55); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: var(--intro-op, 1);">Desplaza ↓</div>
-
-      </div>
-
-      <!-- z5 product tube — outside the scene wrapper so it keeps descending
-           into the card-carousel act instead of scrolling up/fading with the rest -->
-      <div class="dc-tube" style="position: absolute; left: 50%; top: 50%; z-index: 11; --tube-w: clamp(132px, 10vw, 178px); width: var(--tube-w); transform: translate3d(calc(-50% + var(--ptr-fg-x, 0) * 1px), calc(-50% + (var(--tube-y, -70) + var(--ptr-fg-y, 0)) * 1px), 0) scale(var(--tube-scale, 1)); opacity: var(--tube-opacity, 1); will-change: transform, opacity;">
-        <image-slot id="product" shape="rounded" radius="18" placeholder="product.png — tubo dorado" src="uploads/producto.webp" style="width: 100%; height: calc(var(--tube-w) * 3.1);"></image-slot>
-      </div>
-
-      <!-- z9 act4 card slider — fotos de producto -->
-      <div style="position: absolute; left: 0; right: 0; bottom: 8vh; z-index: 9; display: flex; flex-direction: column; align-items: center; gap: 26px; pointer-events: none; transform: translate3d(0, calc(var(--cards-y, 70) * 1vh), 0); opacity: var(--cards-op, 0); will-change: transform, opacity;">
-        <div ref="{{ setTrack }}" style="display: flex; gap: 32px; transform: translate3d(var(--cards-auto-x, 0px), 0, 0); will-change: transform; pointer-events: auto;">
-          <sc-for list="{{ cardsLoop }}" as="card" hint-placeholder-count="9">
-            <div style="width: 400px; max-width: 82vw; height: 220px; flex-shrink: 0; background: #FDF1E1; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.16);">
-              <image-slot id="hero-card-{{ $index }}" shape="rect" fit="cover" placeholder="foto de producto" src="{{ card }}" style="width: 100%; height: 100%;"></image-slot>
-            </div>
-          </sc-for>
-        </div>
-        <div style="display: flex; gap: 16px; opacity: var(--arrows-op, 0); pointer-events: {{ arrowsPointerEvents }};">
-          <button onClick="{{ prevCard }}" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(253,241,225,0.5); background: transparent; color: #FDF1E1; font-size: 18px; cursor: pointer;" style-hover="background: rgba(253,241,225,0.15);">←</button>
-          <button onClick="{{ nextCard }}" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(253,241,225,0.5); background: transparent; color: #FDF1E1; font-size: 18px; cursor: pointer;" style-hover="background: rgba(253,241,225,0.15);">→</button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ═══ RUTINA (pinned scroll) ═══ -->
-  <section id="aplicacion" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; gap: 26px; background: #F7F6EA;">
-    <div style="font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: #4B7A50; font-weight: 600;">Modo de aplicación</div>
-    <h1 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.8rem, 8vw, 7rem); line-height: 0.94; letter-spacing: -0.02em; margin: 0; color: #12160F;">Cinco pasos,<br><em style="font-style: italic; color: #4B7A50;">cada aplicación</em></h1>
-    <p style="max-width: 400px; margin: 0; color: #6D746A; font-size: 16.5px; line-height: 1.6; font-family: 'Manrope', sans-serif;">Así se usa Serum Lashes para que rinda al máximo.</p>
-    <div style="margin-top: 14px; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #6D746A; font-family: 'Manrope', sans-serif;">Baja ↓</div>
-  </section>
-
-  <section class="dc-routine" ref="{{ setRoutine }}" style="position: relative; height: 275svh; z-index: 2;">
-    <div data-snap style="position: absolute; top: 11.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;"></div>
-    <div data-snap style="position: absolute; top: 36.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;"></div>
-    <div data-snap style="position: absolute; top: 61.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;"></div>
-    <div data-snap style="position: absolute; top: 86.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;"></div>
-    <div data-snap style="position: absolute; top: 111.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;"></div>
-    
-    
-    
-    
-    
-    
-    <div data-stage style="position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; align-items: center; background: #F7F6EA;">
-
-      <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 6; background: #CBD9C4;">
-        <i data-progress-bar style="display: block; height: 100%; background: #4B7A50; transform: scaleX(0); transform-origin: left center;"></i>
-      </div>
-
-      <div style="position: absolute; top: 92px; left: 0; right: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
-        <span>Modo de aplicación</span>
-        <span style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;"><b data-counter style="font-weight: 500;">01</b> <i style="font-style: normal; color: #6D746A;">/ 05</i></span>
-      </div>
-
-      <div style="position: absolute; inset: 0; z-index: 0; pointer-events: none;">
-        <div data-numeral style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">01</div>
-        <div data-numeral style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">02</div>
-        <div data-numeral style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">03</div>
-        <div data-numeral style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">04</div>
-        <div data-numeral style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">05</div>
-      </div>
-
-      <div style="position: relative; z-index: 2; width: 100%; padding: 0 clamp(24px, 7vw, 120px) clamp(150px, 24vh, 240px);">
-        <article data-panel style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
-          <h2 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">Desmaquíllate</h2>
-          <p style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">Retira todo rastro de maquillaje antes de aplicar el serum.</p>
-        </article>
-        <article data-panel style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
-          <h2 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">Aplica en forma<br><em style="font-style: italic; color: #4B7A50;">de rímel</em></h2>
-          <p style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">De abajo hacia arriba, dando un ligero cepillado a lo largo de todas tus pestañas.</p>
-        </article>
-        <article data-panel style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
-          <h2 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">Déjalo actuar<br><em style="font-style: italic; color: #4B7A50;">toda la noche</em></h2>
-          <p style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">Aplícalo antes de dormir y deja que trabaje mientras descansas.</p>
-        </article>
-        <article data-panel style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
-          <h2 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">Enjuaga<br><em style="font-style: italic; color: #4B7A50;">por la mañana</em></h2>
-          <p style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">Retíralo con tu rutina normal de limpieza facial.</p>
-        </article>
-        <article data-panel style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
-          <h2 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">Modera<br><em style="font-style: italic; color: #4B7A50;">el rizador</em></h2>
-          <p style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">Úsalo con moderación para no debilitar la pestaña en la base.</p>
-          <a href="#" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; padding: 15px 32px; border-radius: 999px; background: #12160F; color: #F7F6EA; font-size: 14.5px; font-weight: 600; text-decoration: none; font-family: 'Manrope', sans-serif;" style-hover="background: #4B7A50;">Pedir por WhatsApp →</a>
-        </article>
-      </div>
-
-      <svg data-lashline style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; width: 100%; height: clamp(170px, 24vh, 250px); pointer-events: none;" viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true"></svg>
-
-    </div>
-  </section>
-
-  <!-- ═══ EL CICLO — scroll horizontal del pelo ═══ -->
-  <section id="ciclo" ref="{{ setHair }}" data-hair style="position: relative; height: 300vh; margin-top: -100svh; z-index: 1; background: #F7F6EA;">
-    <div data-hair-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
-
-      <div style="position: absolute; top: 96px; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif; pointer-events: none;">
-        <span>El ciclo</span>
-        <span style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;">De la raíz a la punta</span>
-      </div>
-
-      <div data-hair-track style="position: absolute; top: 0; left: 0; height: 100%; will-change: transform;">
-        <svg data-hair-svg viewBox="0 0 6400 1000" style="position: absolute; left: 0; display: block; overflow: visible;" aria-hidden="true"></svg>
-
-          <article data-hcard data-x="1600" data-y="665.7" data-side="below" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">La raíz</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">Todo pasa en el folículo</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">Péptidos y biotina llegan al bulbo donde la pestaña nace. Nada de lo demás ocurre sin esto.</p>
-          </article>
-          <article data-hcard data-x="2360" data-y="655.6" data-side="above" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">Semana 2</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">Deja de quebrarse</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">La fibra retiene humedad y ya no se parte a media longitud. Todavía no se ve más larga: se ve completa.</p>
-          </article>
-          <article data-hcard data-x="3120" data-y="627.6" data-side="below" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">Semana 4</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">El ciclo se alarga</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">La fase de crecimiento se extiende, así que cada pestaña vive más tiempo antes de caer.</p>
-          </article>
-          <article data-hcard data-x="3880" data-y="587.6" data-side="above" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">Semana 6</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">Se llena la línea</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">Los folículos dormidos vuelven a activarse y la base se ve más poblada.</p>
-          </article>
-          <article data-hcard data-x="4640" data-y="534.1" data-side="below" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">Semana 8</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">Aquí preguntan</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">Es cuando la gente asume que traes extensiones. No las traes.</p>
-          </article>
-          <article data-hcard data-x="5400" data-y="469.6" data-side="above" style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
-            <div style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">Semana 12</div>
-            <i data-hrule style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
-            <h3 style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">Sostener el trazo</h3>
-            <p style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">Tres aplicaciones por semana mantienen el resultado. El ciclo no se detiene, solo se acompaña.</p>
-          </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ RESULTADOS — carrusel horizontal de fotos ═══ -->
-  <section id="resultados" ref="{{ setPhotos }}" data-photos style="position: relative; height: 300vh; z-index: 1; background: #F7F6EA;">
-    <div data-photos-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
-
-      <div style="position: absolute; top: 92px; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif; pointer-events: none;">
-        <span>Resultados</span>
-        <span style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;">Clientas reales</span>
-      </div>
-
-      <div data-photos-track style="position: absolute; top: 0; left: 0; height: 100%; display: flex; align-items: center; gap: 28px; padding: 0 8vw; will-change: transform;">
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-1" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref1.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-2" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref2.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-3" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref3.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-4" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref4.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-5" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref5.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-6" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref6.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-7" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref7.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-8" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref8.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-        <div data-pcard style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
-          <image-slot id="ref-9" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref9.png" style="width: 100%; height: 100%;"></image-slot>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ CONTACTO ═══ -->
-  <section id="contacto" style="position: relative; padding: 130px 24px 150px; background: #DCCFA9; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 54px;">
-
-    <div style="position: relative; z-index: 2; text-align: center;">
-      <div style="font-family: 'Manrope', sans-serif; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: #6B4226; font-weight: 600;">Contacto</div>
-      <h2 style="font-family: 'Prata', serif; font-weight: 400; font-size: clamp(2.6rem, 6vw, 4.4rem); color: #2B1B0F; margin: 16px 0 0; letter-spacing: -0.02em; line-height: 1.02;">Habla con nosotras</h2>
-    </div>
-
-    <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%;">
-
-      <!-- CARTA: envíos y puntos de venta (3D, rectangular, con flip) -->
-      <div ref="{{ setStage2 }}" style="position: relative; perspective: 1700px; width: min(1000px, 92vw); min-height: 520px;">
-        <div ref="{{ setTilt2 }}" style="position: relative; width: 100%; min-height: 520px; transform-style: preserve-3d;">
-          <div ref="{{ setFlipper2 }}" style="position: relative; width: 100%; min-height: 520px; transform-style: preserve-3d; transition: transform 0.9s cubic-bezier(0.65,0,0.35,1); transform: {{ flip2Transform }};">
-
-            <!-- FACE: FRONT — información -->
-            <div style="position: relative; backface-visibility: hidden; transform-style: preserve-3d; border-radius: 20px;">
-              <div style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 20px;"></div>
-              <div style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 14px;"></div>
-              <div class="dc-ship" style="position: relative; transform: translateZ(20px); backface-visibility: hidden; padding: 52px clamp(28px, 5vw, 64px); display: flex; flex-direction: column; justify-content: center; gap: 22px; text-align: center; align-items: center;">
-                <div style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase;">Envíos &amp; puntos de venta</div>
-                <div style="font-family: 'Prata', serif; font-size: clamp(30px, 3.4vw, 44px); font-weight: 400; color: #F7F6EA; line-height: 1.08; letter-spacing: -0.015em;">Mazatlán y todo México</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px 44px; max-width: 760px; text-align: left;">
-                  <p style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">Envío el mismo día dentro de Mazatlán. Si tu pedido entra antes de las 4:00 pm, sale ese mismo día.</p>
-                  <p style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">Tenemos diferentes puntos de entrega en Mazatlán. Elige el que te quede más cerca y recoge sin costo de envío.</p>
-                  <p style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">Fuera de la ciudad, enviamos a todo México por paquetería en 2 a 5 días hábiles, con guía de rastreo.</p>
-                  <p style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">Coordina tu entrega por WhatsApp y te confirmamos horario y punto.</p>
-                </div>
-                <button onClick="{{ flipCard2 }}" style="align-self: center; margin-top: 10px; display: flex; align-items: center; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.4); color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 20px; border-radius: 999px; cursor: pointer;">Ver puntos de entrega <span style="color: #f0c98a;">→</span></button>
+              <!-- z0 sky -->
+              <div
+                style="position: absolute; inset: -8vh -4vw; z-index: 0; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1px), calc((var(--sky-y, 0) + var(--ptr-bg-y, 0)) * 1px), 0) scale(1.12); will-change: transform;">
+                <image-slot id="sky" shape="rect" placeholder="sky.png — atardecer ámbar/teal"
+                  src="uploads/fondo_playero.webp" style="width: 100%; height: 100%;"></image-slot>
               </div>
+
+              <!-- z1 clouds -->
+              <div
+                style="position: absolute; inset: -10vh 0 0 0; height: 60vh; z-index: 1; transform: translate3d(calc(var(--ptr-bg-x, 0) * 0.8px), calc((var(--clouds-y, 0) + var(--ptr-bg-y, 0) * 0.8) * 1px), 0); will-change: transform;">
+                <image-slot id="clouds" shape="rect" placeholder="clouds.png — nubes (alfa)" src="uploads/cielo.webp"
+                  style="width: 100%; height: 100%;"></image-slot>
+              </div>
+
+              <!-- z3 palms -->
+              <div class="palm-l"
+                style="position: absolute; left: min(-4vw, -20px); width: min(max(48vw, 560px), 800px); aspect-ratio: 1400/933; bottom: -1vh; z-index: 3; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1.4px), calc(var(--ptr-bg-y, 0) * 1.2 * 1px), 0); will-change: transform;">
+                <div class="palm-sway"
+                  style="width: 100%; height: 100%; animation: palm-sway-left 7.5s ease-in-out infinite; transform-origin: bottom center;">
+                  <image-slot id="palms" shape="rect" fit="contain" placeholder="palmera izquierda — completa con rocas"
+                    src="uploads/palmera_izquierda.webp" style="width: 100%; height: 100%;"></image-slot>
+                </div>
+              </div>
+
+              <!-- z3d right palm layer -->
+              <div class="palm-r"
+                style="position: absolute; right: min(-4vw, -20px); width: min(max(49vw, 580px), 810px); aspect-ratio: 1400/933; bottom: -1vh; z-index: 3; transform: translate3d(calc(var(--ptr-bg-x, 0) * 1.5px), calc(var(--ptr-bg-y, 0) * 1.3 * 1px), 0); will-change: transform;">
+                <div class="palm-sway"
+                  style="width: 100%; height: 100%; animation: palm-sway-right 9s ease-in-out infinite; animation-delay: -3s; transform-origin: bottom center;">
+                  <image-slot id="palms-right" shape="rect" fit="contain"
+                    placeholder="palmera derecha — completa con rocas" src="uploads/palmera_derecha.webp"
+                    style="width: 100%; height: 100%;"></image-slot>
+                </div>
+              </div>
+
             </div>
 
-            <!-- FACE: BACK — carrusel de mapas -->
-            <div style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); transform-style: preserve-3d; border-radius: 20px; overflow: hidden;">
-              <div style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 20px;"></div>
-              <div style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 14px;"></div>
-              <div style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; padding: 32px; display: flex; flex-direction: column; gap: 16px;">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <div style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase;">Puntos de entrega</div>
-                  <button onClick="{{ flipCard2 }}" style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: #E4CDAE; font-family: 'Manrope', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;"><span style="color: #f0c98a;">←</span> Volver</button>
+            <!-- z4 word -->
+            <div class="dc-word"
+              style="position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+              <h1
+                style="margin: 0; display: flex; align-items: baseline; font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(4.5rem, 13vw, 14rem); color: #FDF1E1; line-height: 1; letter-spacing: -0.01em;">
+                <span class="word-left"
+                  style="display: inline-flex; transform: translate3d(calc(var(--word-left-x, 0) * 1vw), 0, 0); will-change: transform;">
+                  <span
+                    style="opacity: var(--letter-op-0, 0); filter: blur(calc(var(--letter-blur-0, 8) * 1px)); transform: translateY(calc(var(--letter-ty-0, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">S</span>
+                  <span
+                    style="opacity: var(--letter-op-1, 0); filter: blur(calc(var(--letter-blur-1, 8) * 1px)); transform: translateY(calc(var(--letter-ty-1, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">E</span>
+                </span>
+                <span style="display: inline-block; width: clamp(0.3rem, 0.9vw, 1rem);"></span>
+                <span class="word-right"
+                  style="display: inline-flex; transform: translate3d(calc(var(--word-right-x, 0) * 1vw), 0, 0); will-change: transform;">
+                  <span
+                    style="opacity: var(--letter-op-2, 0); filter: blur(calc(var(--letter-blur-2, 8) * 1px)); transform: translateY(calc(var(--letter-ty-2, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">R</span>
+                  <span
+                    style="opacity: var(--letter-op-3, 0); filter: blur(calc(var(--letter-blur-3, 8) * 1px)); transform: translateY(calc(var(--letter-ty-3, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">U</span>
+                  <span
+                    style="opacity: var(--letter-op-4, 0); filter: blur(calc(var(--letter-blur-4, 8) * 1px)); transform: translateY(calc(var(--letter-ty-4, 30) * 1px)); display: inline-block; will-change: transform, opacity, filter;">M</span>
+                </span>
+              </h1>
+            </div>
+
+            <!-- LASHES subtitle, reveals after SERUM settles -->
+            <div class="dc-word dc-lashes"
+              style="position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+              <div
+                style="margin-top: clamp(6.5rem, 16vw, 17rem); font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(1.6rem, 4.2vw, 4rem); letter-spacing: 0.55em; color: #FDF1E1; opacity: var(--lashes-op, 0); transform: translateY(calc(var(--lashes-y, 24) * 1px)); will-change: transform, opacity;">
+                LASHES</div>
+            </div>
+
+            <!-- intro copy (act1) -->
+            <div class="dc-intro"
+              style="position: absolute; left: 0; right: 0; top: 26%; z-index: 8; display: flex; justify-content: center; pointer-events: none; opacity: var(--intro-op, 1); transform: translateY(calc(var(--intro-y, 0) * 1px));">
+              <p class="dc-intro-p"
+                style="max-width: 420px; text-align: center; color: #FDF1E1; text-shadow: 0 1px 14px rgba(8,34,44,0.45); font-size: 17px; line-height: 1.5; font-weight: 400; margin: 0; padding: 0 20px;">
+                Una fórmula nacida del coco, para pestañas que crecen con la marea.</p>
+            </div>
+
+            <!-- scroll hint -->
+            <div
+              style="position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); z-index: 8; color: rgba(253,241,225,0.55); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; opacity: var(--intro-op, 1);">
+              Desplaza ↓</div>
+
+          </div>
+
+          <!-- z5 product tube — outside the scene wrapper so it keeps descending
+           into the card-carousel act instead of scrolling up/fading with the rest -->
+          <div class="dc-tube"
+            style="position: absolute; left: 50%; top: 50%; z-index: 11; --tube-w: clamp(132px, 10vw, 178px); width: var(--tube-w); transform: translate3d(calc(-50% + var(--ptr-fg-x, 0) * 1px), calc(-50% + (var(--tube-y, -70) + var(--ptr-fg-y, 0)) * 1px), 0) scale(var(--tube-scale, 1)); opacity: var(--tube-opacity, 1); will-change: transform, opacity;">
+            <image-slot id="product" shape="rounded" radius="18" placeholder="product.png — tubo dorado"
+              src="uploads/producto.webp" style="width: 100%; height: calc(var(--tube-w) * 3.1);"></image-slot>
+          </div>
+
+          <!-- z9 act4 card slider — fotos de producto -->
+          <div
+            style="position: absolute; left: 0; right: 0; bottom: 8vh; z-index: 9; display: flex; flex-direction: column; align-items: center; gap: 26px; pointer-events: none; transform: translate3d(0, calc(var(--cards-y, 70) * 1vh), 0); opacity: var(--cards-op, 0); will-change: transform, opacity;">
+            <div ref="{{ setTrack }}"
+              style="display: flex; gap: 32px; transform: translate3d(var(--cards-auto-x, 0px), 0, 0); will-change: transform; pointer-events: auto;">
+              <sc-for list="{{ cardsLoop }}" as="card" hint-placeholder-count="9">
+                <div
+                  style="width: 400px; max-width: 82vw; height: 220px; flex-shrink: 0; background: #FDF1E1; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.16);">
+                  <image-slot id="hero-card-{{ $index }}" shape="rect" fit="cover" placeholder="foto de producto"
+                    src="{{ card }}" style="width: 100%; height: 100%;"></image-slot>
                 </div>
-                <div style="position: relative; flex: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.25);">
-                  <div style="display: flex; height: 100%; width: 300%; transform: translate3d(calc(var(--map-index, 0) * -33.3333%), 0, 0); transition: transform 0.6s cubic-bezier(0.65,0,0.35,1);" ref="{{ setMapTrack }}">
-                    <sc-for list="{{ mapPoints }}" as="pt" hint-placeholder-count="3">
-                      <div style="width: 33.3333%; height: 100%; position: relative; flex-shrink: 0; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.18);">
-                        <image-slot data-map="1" id="map-{{ $index }}" shape="rect" fit="cover" placeholder="captura del mapa — punto de entrega" style="width: 100%; height: 100%;"></image-slot>
-                        <a href="{{ pt.url }}" target="_blank" rel="noopener" style="position: absolute; z-index: 2; left: 12px; bottom: 12px; right: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(43,27,15,0.82); backdrop-filter: blur(4px); border-radius: 8px; padding: 10px 14px; text-decoration: none; pointer-events: auto;">
-                          <span style="font-family: 'Manrope', sans-serif; font-size: 13px; color: #F7F6EA; font-weight: 600;">{{ pt.name }}</span>
-                          <span style="font-family: 'Manrope', sans-serif; font-size: 12px; color: #f0c98a;">Ver en Maps →</span>
-                        </a>
-                      </div>
-                    </sc-for>
+              </sc-for>
+            </div>
+            <div
+              style="display: flex; gap: 16px; opacity: var(--arrows-op, 0); pointer-events: {{ arrowsPointerEvents }};">
+              <button onClick="{{ prevCard }}"
+                style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(253,241,225,0.5); background: transparent; color: #FDF1E1; font-size: 18px; cursor: pointer;"
+                style-hover="background: rgba(253,241,225,0.15);">←</button>
+              <button onClick="{{ nextCard }}"
+                style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(253,241,225,0.5); background: transparent; color: #FDF1E1; font-size: 18px; cursor: pointer;"
+                style-hover="background: rgba(253,241,225,0.15);">→</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ RUTINA (pinned scroll) ═══ -->
+      <section id="aplicacion"
+        style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; gap: 26px; background: #F7F6EA;">
+        <div
+          style="font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: #4B7A50; font-weight: 600;">
+          Modo de aplicación</div>
+        <h1
+          style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.8rem, 8vw, 7rem); line-height: 0.94; letter-spacing: -0.02em; margin: 0; color: #12160F;">
+          Cinco pasos,<br><em style="font-style: italic; color: #4B7A50;">cada aplicación</em></h1>
+        <p
+          style="max-width: 400px; margin: 0; color: #6D746A; font-size: 16.5px; line-height: 1.6; font-family: 'Manrope', sans-serif;">
+          Así se usa Serum Lashes para que rinda al máximo.</p>
+        <div
+          style="margin-top: 14px; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #6D746A; font-family: 'Manrope', sans-serif;">
+          Baja ↓</div>
+      </section>
+
+      <section class="dc-routine" ref="{{ setRoutine }}" style="position: relative; height: 275svh; z-index: 2;">
+        <div data-snap
+          style="position: absolute; top: 11.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
+        </div>
+        <div data-snap
+          style="position: absolute; top: 36.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
+        </div>
+        <div data-snap
+          style="position: absolute; top: 61.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
+        </div>
+        <div data-snap
+          style="position: absolute; top: 86.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
+        </div>
+        <div data-snap
+          style="position: absolute; top: 111.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
+        </div>
+
+
+
+
+
+
+        <div data-stage
+          style="position: sticky; top: 0; height: 100svh; overflow: hidden; display: flex; align-items: center; background: #F7F6EA;">
+
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; z-index: 6; background: #CBD9C4;">
+            <i data-progress-bar
+              style="display: block; height: 100%; background: #4B7A50; transform: scaleX(0); transform-origin: left center;"></i>
+          </div>
+
+          <div
+            style="position: absolute; top: 92px; left: 0; right: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+            <span>Modo de aplicación</span>
+            <span
+              style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;"><b
+                data-counter style="font-weight: 500;">01</b> <i style="font-style: normal; color: #6D746A;">/
+                05</i></span>
+          </div>
+
+          <div style="position: absolute; inset: 0; z-index: 0; pointer-events: none;">
+            <div data-numeral
+              style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">
+              01</div>
+            <div data-numeral
+              style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">
+              02</div>
+            <div data-numeral
+              style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">
+              03</div>
+            <div data-numeral
+              style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">
+              04</div>
+            <div data-numeral
+              style="position: absolute; right: -3vw; top: 44%; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(13rem, 38vw, 42rem); line-height: 0.72; color: #D6EBCF; opacity: 0; transform: translateY(-50%);">
+              05</div>
+          </div>
+
+          <div
+            style="position: relative; z-index: 2; width: 100%; padding: 0 clamp(24px, 7vw, 120px) clamp(150px, 24vh, 240px);">
+            <article data-panel
+              style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
+              <h2
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">
+                Desmaquíllate</h2>
+              <p
+                style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Retira todo rastro de maquillaje antes de aplicar el serum.</p>
+            </article>
+            <article data-panel
+              style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
+              <h2
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">
+                Aplica en forma<br><em style="font-style: italic; color: #4B7A50;">de rímel</em></h2>
+              <p
+                style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                De abajo hacia arriba, dando un ligero cepillado a lo largo de todas tus pestañas.</p>
+            </article>
+            <article data-panel
+              style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
+              <h2
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">
+                Déjalo actuar<br><em style="font-style: italic; color: #4B7A50;">toda la noche</em></h2>
+              <p
+                style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Aplícalo antes de dormir y deja que trabaje mientras descansas.</p>
+            </article>
+            <article data-panel
+              style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
+              <h2
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">
+                Enjuaga<br><em style="font-style: italic; color: #4B7A50;">por la mañana</em></h2>
+              <p
+                style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Retíralo con tu rutina normal de limpieza facial.</p>
+            </article>
+            <article data-panel
+              style="position: absolute; top: 50%; left: clamp(24px, 7vw, 120px); width: min(600px, calc(100% - 48px)); transform: translateY(-50%); opacity: 0;">
+              <h2
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(2.2rem, 5.4vw, 5rem); line-height: 1; letter-spacing: -0.02em; margin: 0 0 22px; color: #12160F;">
+                Modera<br><em style="font-style: italic; color: #4B7A50;">el rizador</em></h2>
+              <p
+                style="margin: 0; max-width: 440px; color: #6D746A; font-size: clamp(15px, 1.3vw, 17.5px); line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Úsalo con moderación para no debilitar la pestaña en la base.</p>
+              <a href="#"
+                style="display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; padding: 15px 32px; border-radius: 999px; background: #12160F; color: #F7F6EA; font-size: 14.5px; font-weight: 600; text-decoration: none; font-family: 'Manrope', sans-serif;"
+                style-hover="background: #4B7A50;">Pedir por WhatsApp →</a>
+            </article>
+          </div>
+
+          <svg data-lashline
+            style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; width: 100%; height: clamp(170px, 24vh, 250px); pointer-events: none;"
+            viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+        </div>
+      </section>
+
+      <!-- ═══ EL CICLO — scroll horizontal del pelo ═══ -->
+      <section id="ciclo" ref="{{ setHair }}" data-hair
+        style="position: relative; height: 300vh; margin-top: -100svh; z-index: 1; background: #F7F6EA;">
+        <div data-hair-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
+
+          <div
+            style="position: absolute; top: 96px; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif; pointer-events: none;">
+            <span>El ciclo</span>
+            <span
+              style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;">De
+              la raíz a la punta</span>
+          </div>
+
+          <div data-hair-track style="position: absolute; top: 0; left: 0; height: 100%; will-change: transform;">
+            <svg data-hair-svg viewBox="0 0 6400 1000"
+              style="position: absolute; left: 0; display: block; overflow: visible;" aria-hidden="true"></svg>
+
+            <article data-hcard data-x="1600" data-y="665.7" data-side="below"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                La raíz</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                Todo pasa en el folículo</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Péptidos y biotina llegan al bulbo donde la pestaña nace. Nada de lo demás ocurre sin esto.</p>
+            </article>
+            <article data-hcard data-x="2360" data-y="655.6" data-side="above"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                Semana 2</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                Deja de quebrarse</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                La fibra retiene humedad y ya no se parte a media longitud. Todavía no se ve más larga: se ve completa.
+              </p>
+            </article>
+            <article data-hcard data-x="3120" data-y="627.6" data-side="below"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                Semana 4</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                El ciclo se alarga</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                La fase de crecimiento se extiende, así que cada pestaña vive más tiempo antes de caer.</p>
+            </article>
+            <article data-hcard data-x="3880" data-y="587.6" data-side="above"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                Semana 6</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                Se llena la línea</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Los folículos dormidos vuelven a activarse y la base se ve más poblada.</p>
+            </article>
+            <article data-hcard data-x="4640" data-y="534.1" data-side="below"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                Semana 8</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                Aquí preguntan</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Es cuando la gente asume que traes extensiones. No las traes.</p>
+            </article>
+            <article data-hcard data-x="5400" data-y="469.6" data-side="above"
+              style="position: absolute; width: min(320px, 74vw); padding: 24px 26px 26px; background: #FFFEF7; border-radius: 5px; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 12px 28px -10px rgba(18,22,15,0.22); opacity: 0; will-change: transform, opacity;">
+              <div
+                style="font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif;">
+                Semana 12</div>
+              <i data-hrule
+                style="display: block; width: 40px; height: 1px; background: #4B7A50; opacity: 0.5; margin: 14px 0 16px; transform: scaleX(0); transform-origin: left center;"></i>
+              <h3
+                style="font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: clamp(21px, 2.1vw, 28px); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 10px; color: #12160F;">
+                Sostener el trazo</h3>
+              <p
+                style="margin: 0; color: #6D746A; font-size: 14.5px; line-height: 1.62; font-family: 'Manrope', sans-serif;">
+                Tres aplicaciones por semana mantienen el resultado. El ciclo no se detiene, solo se acompaña.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ RESULTADOS — carrusel horizontal de fotos ═══ -->
+      <section id="resultados" ref="{{ setPhotos }}" data-photos
+        style="position: relative; height: 300vh; z-index: 1; background: #F7F6EA;">
+        <div data-photos-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
+
+          <div
+            style="position: absolute; top: 92px; left: 0; right: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 72px); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #4B7A50; font-weight: 600; font-family: 'Manrope', sans-serif; pointer-events: none;">
+            <span>Resultados</span>
+            <span
+              style="font-family: 'Bodoni Moda', serif; font-size: 15px; letter-spacing: 0.12em; color: #12160F; text-transform: none;">Clientas
+              reales</span>
+          </div>
+
+          <div data-photos-track
+            style="position: absolute; top: 0; left: 0; height: 100%; display: flex; align-items: center; gap: 28px; padding: 0 8vw; will-change: transform;">
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-1" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref1.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-2" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref2.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-3" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref3.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-4" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref4.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-5" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref5.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-6" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref6.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-7" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref7.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-8" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref8.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+            <div data-pcard
+              style="width: min(320px, 72vw); height: min(430px, 62vh); flex-shrink: 0; border-radius: 6px; overflow: hidden; background: #E7E4D4; box-shadow: 0 1px 2px rgba(18,22,15,0.05), 0 16px 34px -10px rgba(18,22,15,0.25); opacity: 0; will-change: transform, opacity;">
+              <image-slot id="ref-9" shape="rect" fit="cover" placeholder="foto de referencia" src="images/ref9.png"
+                style="width: 100%; height: 100%;"></image-slot>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ CONTACTO ═══ -->
+      <section id="contacto"
+        style="position: relative; padding: 130px 24px 150px; background: #DCCFA9; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 54px;">
+
+        <div style="position: relative; z-index: 2; text-align: center;">
+          <div
+            style="font-family: 'Manrope', sans-serif; font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase; color: #6B4226; font-weight: 600;">
+            Contacto</div>
+          <h2
+            style="font-family: 'Prata', serif; font-weight: 400; font-size: clamp(2.6rem, 6vw, 4.4rem); color: #2B1B0F; margin: 16px 0 0; letter-spacing: -0.02em; line-height: 1.02;">
+            Habla con nosotras</h2>
+        </div>
+
+        <div
+          style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%;">
+
+          <!-- CARTA: envíos y puntos de venta (3D, rectangular, con flip) -->
+          <div ref="{{ setStage2 }}"
+            style="position: relative; perspective: 1700px; width: min(1000px, 92vw); min-height: 520px;">
+            <div ref="{{ setTilt2 }}"
+              style="position: relative; width: 100%; min-height: 520px; transform-style: preserve-3d;">
+              <div ref="{{ setFlipper2 }}"
+                style="position: relative; width: 100%; min-height: 520px; transform-style: preserve-3d; transition: transform 0.9s cubic-bezier(0.65,0,0.35,1); transform: {{ flip2Transform }};">
+
+                <!-- FACE: FRONT — información -->
+                <div
+                  style="position: relative; backface-visibility: hidden; transform-style: preserve-3d; border-radius: 20px;">
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 20px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 14px;">
+                  </div>
+                  <div class="dc-ship"
+                    style="position: relative; transform: translateZ(20px); backface-visibility: hidden; padding: 52px clamp(28px, 5vw, 64px); display: flex; flex-direction: column; justify-content: center; gap: 22px; text-align: center; align-items: center;">
+                    <div
+                      style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase;">
+                      Envíos &amp; puntos de venta</div>
+                    <div
+                      style="font-family: 'Prata', serif; font-size: clamp(30px, 3.4vw, 44px); font-weight: 400; color: #F7F6EA; line-height: 1.08; letter-spacing: -0.015em;">
+                      Mazatlán y todo México</div>
+                    <div
+                      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px 44px; max-width: 760px; text-align: left;">
+                      <p
+                        style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">
+                        Envío el mismo día dentro de Mazatlán. Si tu pedido entra antes de las 4:00 pm, sale ese mismo
+                        día.</p>
+                      <p
+                        style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">
+                        Tenemos diferentes puntos de entrega en Mazatlán. Elige el que te quede más cerca y recoge sin
+                        costo de envío.</p>
+                      <p
+                        style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">
+                        Fuera de la ciudad, enviamos a todo México por paquetería en 2 a 5 días hábiles, con guía de
+                        rastreo.</p>
+                      <p
+                        style="margin: 0; font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; color: #E4CDAE;">
+                        Coordina tu entrega por WhatsApp y te confirmamos horario y punto.</p>
+                    </div>
+                    <button onClick="{{ flipCard2 }}"
+                      style="align-self: center; margin-top: 10px; display: flex; align-items: center; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.4); color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 20px; border-radius: 999px; cursor: pointer;">Ver
+                      puntos de entrega <span style="color: #f0c98a;">→</span></button>
                   </div>
                 </div>
-                <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
-                  <button onClick="{{ prevMap }}" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); background: transparent; color: #F7F6EA; font-size: 15px; cursor: pointer;">←</button>
-                  <sc-for list="{{ mapPoints }}" as="pt" hint-placeholder-count="3">
-                    <span style="width: 18px; height: 6px; border-radius: 999px; background: {{ dotColor($index) }}; display: inline-block; transition: background 0.3s;"></span>
-                  </sc-for>
-                  <button onClick="{{ nextMap }}" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); background: transparent; color: #F7F6EA; font-size: 15px; cursor: pointer;">→</button>
+
+                <!-- FACE: BACK — carrusel de mapas -->
+                <div
+                  style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); transform-style: preserve-3d; border-radius: 20px; overflow: hidden;">
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 20px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 14px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; padding: 32px; display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <div
+                        style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase;">
+                        Puntos de entrega</div>
+                      <button onClick="{{ flipCard2 }}"
+                        style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: #E4CDAE; font-family: 'Manrope', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;"><span
+                          style="color: #f0c98a;">←</span> Volver</button>
+                    </div>
+                    <div
+                      style="position: relative; flex: 1; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.25);">
+                      <div
+                        style="display: flex; height: 100%; width: 300%; transform: translate3d(calc(var(--map-index, 0) * -33.3333%), 0, 0); transition: transform 0.6s cubic-bezier(0.65,0,0.35,1);"
+                        ref="{{ setMapTrack }}">
+                        <sc-for list="{{ mapPoints }}" as="pt" hint-placeholder-count="3">
+                          <div
+                            style="width: 33.3333%; height: 100%; position: relative; flex-shrink: 0; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.18);">
+                            <image-slot data-map="1" id="map-{{ $index }}" shape="rect" fit="cover"
+                              placeholder="captura del mapa — punto de entrega"
+                              style="width: 100%; height: 100%;"></image-slot>
+                            <a href="{{ pt.url }}" target="_blank" rel="noopener"
+                              style="position: absolute; z-index: 2; left: 12px; bottom: 12px; right: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(43,27,15,0.82); backdrop-filter: blur(4px); border-radius: 8px; padding: 10px 14px; text-decoration: none; pointer-events: auto;">
+                              <span
+                                style="font-family: 'Manrope', sans-serif; font-size: 13px; color: #F7F6EA; font-weight: 600;">{{
+                                pt.name }}</span>
+                              <span style="font-family: 'Manrope', sans-serif; font-size: 12px; color: #f0c98a;">Ver en
+                                Maps →</span>
+                            </a>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+                      <button onClick="{{ prevMap }}"
+                        style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); background: transparent; color: #F7F6EA; font-size: 15px; cursor: pointer;">←</button>
+                      <sc-for list="{{ mapPoints }}" as="pt" hint-placeholder-count="3">
+                        <span
+                          style="width: 18px; height: 6px; border-radius: 999px; background: {{ dotColor($index) }}; display: inline-block; transition: background 0.3s;"></span>
+                      </sc-for>
+                      <button onClick="{{ nextMap }}"
+                        style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); background: transparent; color: #F7F6EA; font-size: 15px; cursor: pointer;">→</button>
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
-
           </div>
-        </div>
-      </div>
 
-      <!-- CARTA: contacto (3D interactiva) -->
-      <div ref="{{ setStage }}" style="position: relative; perspective: 1700px; width: min(360px, 84vw); height: 500px;">
-        <div ref="{{ setTilt }}" style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d;">
-          <div ref="{{ setFlipper }}" onClick="{{ flipCard }}" style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; cursor: pointer;">
+          <!-- CARTA: contacto (3D interactiva) -->
+          <div ref="{{ setStage }}"
+            style="position: relative; perspective: 1700px; width: min(360px, 84vw); height: 500px;">
+            <div ref="{{ setTilt }}"
+              style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d;">
+              <div ref="{{ setFlipper }}" onClick="{{ flipCard }}"
+                style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; cursor: pointer;">
 
-            <!-- FACE: FRONT -->
-            <div style="position: absolute; inset: 0; backface-visibility: hidden; transform-style: preserve-3d; border-radius: 16px; overflow: hidden;">
-              <div style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 16px;"></div>
-              <div style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 11px;"></div>
-              <div style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 30px; text-align: center;">
-                <img src="uploads/logolashes.png" alt="Serum Lashes" style="height: 74px; width: auto; filter: brightness(0) invert(1);">
-                <div>
-                  <div style="font-family: 'Prata', serif; font-size: 22px; font-weight: 400; color: #F7F6EA; letter-spacing: 0.06em;">SERUM LASHES</div>
-                  <div style="margin-top: 6px; font-family: 'Manrope', sans-serif; font-size: 12px; color: #E4CDAE; letter-spacing: 0.2em; text-transform: uppercase;">Atención &amp; pedidos</div>
+                <!-- FACE: FRONT -->
+                <div
+                  style="position: absolute; inset: 0; backface-visibility: hidden; transform-style: preserve-3d; border-radius: 16px; overflow: hidden;">
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 16px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 11px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 30px; text-align: center;">
+                    <img src="uploads/logolashes.png" alt="Serum Lashes"
+                      style="height: 74px; width: auto; filter: brightness(0) invert(1);">
+                    <div>
+                      <div
+                        style="font-family: 'Prata', serif; font-size: 22px; font-weight: 400; color: #F7F6EA; letter-spacing: 0.06em;">
+                        SERUM LASHES</div>
+                      <div
+                        style="margin-top: 6px; font-family: 'Manrope', sans-serif; font-size: 12px; color: #E4CDAE; letter-spacing: 0.2em; text-transform: uppercase;">
+                        Atención &amp; pedidos</div>
+                    </div>
+                    <div
+                      style="margin-top: 10px; font-family: 'Manrope', sans-serif; font-size: 11px; color: #E4CDAE; letter-spacing: 0.15em; opacity: 0.8;">
+                      Toca para voltear</div>
+                  </div>
                 </div>
-                <div style="margin-top: 10px; font-family: 'Manrope', sans-serif; font-size: 11px; color: #E4CDAE; letter-spacing: 0.15em; opacity: 0.8;">Toca para voltear</div>
+
+                <!-- FACE: BACK -->
+                <div
+                  style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); transform-style: preserve-3d; border-radius: 16px; overflow: hidden;">
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 16px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 11px;">
+                  </div>
+                  <div
+                    style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 34px; text-align: left;">
+                    <div
+                      style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase; align-self: center;">
+                      Canales</div>
+                    <a href="https://wa.me/5216691001838" target="_blank" rel="noopener"
+                      style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg
+                        viewBox="0 0 24 24" width="19" height="19" fill="#f0c98a" style="flex-shrink: 0;">
+                        <path
+                          d="M12.03 2C6.94 2 2.8 6.13 2.8 11.22c0 1.79.5 3.46 1.38 4.89L2.5 22l6.05-1.58a9.2 9.2 0 0 0 3.48.68h.01c5.09 0 9.23-4.13 9.23-9.22C21.27 6.13 17.12 2 12.03 2Zm0 16.85h-.01a7.66 7.66 0 0 1-3.9-1.07l-.28-.17-2.9.76.77-2.83-.18-.29a7.6 7.6 0 0 1-1.17-4.06c0-4.23 3.44-7.67 7.67-7.67 2.05 0 3.97.8 5.42 2.25a7.6 7.6 0 0 1 2.25 5.42c0 4.23-3.44 7.66-7.67 7.66Zm4.21-5.74c-.23-.12-1.36-.67-1.57-.75-.21-.08-.37-.11-.52.12-.15.23-.59.75-.73.9-.13.16-.27.17-.5.06-.23-.12-.97-.36-1.86-1.14-.68-.61-1.15-1.36-1.28-1.59-.14-.23-.02-.35.1-.47.1-.1.23-.27.34-.4.12-.14.15-.23.23-.39.08-.15.04-.29-.02-.4-.06-.12-.52-1.25-.71-1.71-.19-.45-.38-.39-.52-.4h-.45c-.15 0-.4.06-.6.29-.21.23-.79.77-.79 1.89 0 1.11.81 2.19.92 2.34.12.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.44-.07 1.36-.56 1.55-1.09.19-.54.19-1 .13-1.1-.06-.1-.21-.16-.44-.28Z">
+                        </path>
+                      </svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">WhatsApp <span
+                          style="color: #E4CDAE; font-size: 14px;">669 100 1838</span></span></a>
+                    <a href="https://www.instagram.com/serumlashesmzt?utm_source=ig_web_button_share_sheet&amp;igsi=ZDNlZDc0MzIxNw=="
+                      target="_blank" rel="noopener"
+                      style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg
+                        viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#f0c98a" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5.4"></rect>
+                        <circle cx="12" cy="12" r="4.2"></circle>
+                        <circle cx="17.6" cy="6.4" r="1.1" fill="#f0c98a" stroke="none"></circle>
+                      </svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">Instagram <span
+                          style="color: #E4CDAE; font-size: 14px;">@serumlashesmzt</span></span></a>
+                    <a href="mailto:hola@serumlashes.com"
+                      style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg
+                        viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#f0c98a" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                        <rect x="2.5" y="4.5" width="19" height="15" rx="2.6"></rect>
+                        <path d="m3 6.5 9 6 9-6"></path>
+                      </svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">Email <span
+                          style="color: #E4CDAE; font-size: 14px;">hola@serumlashes.com</span></span></a>
+                    <div
+                      style="margin-top: 8px; font-family: 'Manrope', sans-serif; font-size: 11px; color: #E4CDAE; letter-spacing: 0.15em; opacity: 0.8;">
+                      Toca para volver</div>
+                  </div>
+                </div>
+
               </div>
             </div>
-
-            <!-- FACE: BACK -->
-            <div style="position: absolute; inset: 0; backface-visibility: hidden; transform: rotateY(180deg); transform-style: preserve-3d; border-radius: 16px; overflow: hidden;">
-              <div style="position: absolute; inset: 0; transform: translateZ(-18px); backface-visibility: hidden; background: #4A2F1C; border-radius: 16px;"></div>
-              <div style="position: absolute; inset: 9px; transform: translateZ(4px); backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.35); border-radius: 11px;"></div>
-              <div style="position: absolute; inset: 0; transform: translateZ(20px); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 34px; text-align: left;">
-                <div style="font-family: 'Manrope', sans-serif; font-size: 11px; color: #f0c98a; letter-spacing: 0.3em; text-transform: uppercase; align-self: center;">Canales</div>
-                <a href="https://wa.me/5216691001838" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg viewBox="0 0 24 24" width="19" height="19" fill="#f0c98a" style="flex-shrink: 0;"><path d="M12.03 2C6.94 2 2.8 6.13 2.8 11.22c0 1.79.5 3.46 1.38 4.89L2.5 22l6.05-1.58a9.2 9.2 0 0 0 3.48.68h.01c5.09 0 9.23-4.13 9.23-9.22C21.27 6.13 17.12 2 12.03 2Zm0 16.85h-.01a7.66 7.66 0 0 1-3.9-1.07l-.28-.17-2.9.76.77-2.83-.18-.29a7.6 7.6 0 0 1-1.17-4.06c0-4.23 3.44-7.67 7.67-7.67 2.05 0 3.97.8 5.42 2.25a7.6 7.6 0 0 1 2.25 5.42c0 4.23-3.44 7.66-7.67 7.66Zm4.21-5.74c-.23-.12-1.36-.67-1.57-.75-.21-.08-.37-.11-.52.12-.15.23-.59.75-.73.9-.13.16-.27.17-.5.06-.23-.12-.97-.36-1.86-1.14-.68-.61-1.15-1.36-1.28-1.59-.14-.23-.02-.35.1-.47.1-.1.23-.27.34-.4.12-.14.15-.23.23-.39.08-.15.04-.29-.02-.4-.06-.12-.52-1.25-.71-1.71-.19-.45-.38-.39-.52-.4h-.45c-.15 0-.4.06-.6.29-.21.23-.79.77-.79 1.89 0 1.11.81 2.19.92 2.34.12.15 1.6 2.44 3.87 3.42.54.23.96.37 1.29.48.54.17 1.03.15 1.42.09.44-.07 1.36-.56 1.55-1.09.19-.54.19-1 .13-1.1-.06-.1-.21-.16-.44-.28Z"></path></svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">WhatsApp <span style="color: #E4CDAE; font-size: 14px;">669 100 1838</span></span></a>
-                <a href="https://www.instagram.com/serumlashesmzt?utm_source=ig_web_button_share_sheet&amp;igsi=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#f0c98a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2.5" y="2.5" width="19" height="19" rx="5.4"></rect><circle cx="12" cy="12" r="4.2"></circle><circle cx="17.6" cy="6.4" r="1.1" fill="#f0c98a" stroke="none"></circle></svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">Instagram <span style="color: #E4CDAE; font-size: 14px;">@serumlashesmzt</span></span></a>
-                <a href="mailto:hola@serumlashes.com" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F7F6EA; font-family: 'Manrope', sans-serif; font-size: 15px;"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#f0c98a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="2.5" y="4.5" width="19" height="15" rx="2.6"></rect><path d="m3 6.5 9 6 9-6"></path></svg> <span style="display: flex; flex-direction: column; line-height: 1.3;">Email <span style="color: #E4CDAE; font-size: 14px;">hola@serumlashes.com</span></span></a>
-                <div style="margin-top: 8px; font-family: 'Manrope', sans-serif; font-size: 11px; color: #E4CDAE; letter-spacing: 0.15em; opacity: 0.8;">Toca para volver</div>
-              </div>
-            </div>
-
           </div>
+
         </div>
-      </div>
+      </section>
 
     </div>
-  </section>
 
-</div>
-
-</x-dc>
-<script type="text/x-dc" data-dc-script>
+  </x-dc>
+  <script type="text/x-dc" data-dc-script>
 const BASE_CARDS = ['images/serum1.png','images/serum2.png','images/serum3.png','images/serum4.png','images/serum5.png','images/serum6.png','images/serum7.png','images/serum8.png','images/serum9.png'];
 const CARD_WIDTH = 432; // 400 + 32 gap
 const SET_WIDTH = CARD_WIDTH * BASE_CARDS.length;
@@ -565,10 +1179,25 @@ class Component extends DCLogic {
   }
 
   installScrollBrake() {
-    // En móvil dejamos intacta la inercia nativa. La versión anterior
-    // reescribía scrollTop durante 1.4 s después de touchend y peleaba con
-    // el momentum de iOS/Android, provocando pequeños tirones al soltar.
-    this._brakeCleanup = null;
+    if (window.innerWidth > 860) return;
+    const root = document.scrollingElement || document.documentElement;
+    const MAX = 22; // px por frame tras soltar el dedo
+    let braking = false, last = 0, raf = 0;
+    const stop = () => { braking = false; if (raf) cancelAnimationFrame(raf); raf = 0; };
+    const tick = () => {
+      if (!braking) return;
+      const y = root.scrollTop;
+      const d = y - last;
+      if (Math.abs(d) > MAX) { root.scrollTop = last + Math.sign(d) * MAX; }
+      last = root.scrollTop;
+      raf = requestAnimationFrame(tick);
+    };
+    this._brakeOn = () => { stop(); braking = false; };
+    const onStart = () => { stop(); };
+    const onEnd = () => { braking = true; last = root.scrollTop; raf = requestAnimationFrame(tick); setTimeout(stop, 1400); };
+    window.addEventListener('touchstart', onStart, { passive: true });
+    window.addEventListener('touchend', onEnd, { passive: true });
+    this._brakeCleanup = () => { stop(); window.removeEventListener('touchstart', onStart); window.removeEventListener('touchend', onEnd); };
   }
 
   componentDidMount() {
@@ -624,7 +1253,6 @@ class Component extends DCLogic {
   componentWillUnmount() {
     this.running = false;
     if (this._brakeCleanup) this._brakeCleanup();
-    if (this._routineSnapObserver) this._routineSnapObserver.disconnect();
     if (this.raf) cancelAnimationFrame(this.raf);
     clearTimeout(this._resizeT);
     window.removeEventListener('mousemove', this.onMove);
@@ -754,14 +1382,9 @@ class Component extends DCLogic {
     this.routineGroups = [];
     this.buildLashes();
 
-    // En escritorio conservamos el snap suave de la rutina. En móvil se
-    // desactiva: CSS scroll-snap + scroll-behavior:smooth interfiere con el
-    // momentum táctil y con las secciones sticky.
-    const root = document.scrollingElement || document.documentElement;
-    if (window.innerWidth <= 860) {
-      root.style.scrollSnapType = '';
-      root.style.scrollBehavior = '';
-    } else if (!this.reduced && 'IntersectionObserver' in window) {
+    // Snap suave: cada gesto de scroll aterriza en el siguiente paso.
+    if (!this.reduced && 'IntersectionObserver' in window) {
+      const root = document.scrollingElement || document.documentElement;
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
           root.style.scrollSnapType = e.isIntersecting ? 'y proximity' : '';
@@ -769,7 +1392,6 @@ class Component extends DCLogic {
         });
       }, { rootMargin: '-10% 0px -10% 0px' });
       io.observe(section);
-      this._routineSnapObserver = io;
     }
 
     if (this.reduced) {
@@ -890,7 +1512,7 @@ class Component extends DCLogic {
       if (panel._op !== opS) { panel._op = opS; panel.style.opacity = opS; }
       const trS = 'translate3d(' + y.toFixed(1) + 'px, -50%, 0)';
       if (panel._tr !== trS) { panel._tr = trS; panel.style.transform = trS; }
-      const blS = (window.innerWidth <= 860 || op < 0.02 || blur < 0.2) ? 'none' : 'blur(' + blur.toFixed(1) + 'px)';
+      const blS = (op < 0.02 || blur < 0.2) ? 'none' : 'blur(' + blur.toFixed(1) + 'px)';
       if (panel._bl !== blS) { panel._bl = blS; panel.style.filter = blS; }
 
       const nOpS = nOp.toFixed(3);
@@ -956,16 +1578,16 @@ class Component extends DCLogic {
     svg.appendChild(defs);
 
     const ellipse = document.createElementNS(NS, 'ellipse');
-    ellipse.setAttribute('cx', '150'); ellipse.setAttribute('cy', this.baseHairY(0.01)); ellipse.setAttribute('rx', '230'); ellipse.setAttribute('ry', '150'); ellipse.setAttribute('fill', 'url(#hairHalo)');
+    ellipse.setAttribute('cx', '72'); ellipse.setAttribute('cy', this.baseHairY(0.01)); ellipse.setAttribute('rx', '230'); ellipse.setAttribute('ry', '150'); ellipse.setAttribute('fill', 'url(#hairHalo)');
     svg.appendChild(ellipse);
 
     // dos hebras finas guía, más claras, ligeramente desplazadas
     [-95, 95].forEach(offset => {
       let d = '';
-      for (let x = 95; x <= W - 30; x += 32) {
+      for (let x = 8; x <= W - 12; x += 32) {
         const u = x / W;
         const y = this.baseHairY(u) + offset;
-        d += (x === 95 ? 'M ' : 'L ') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+        d += (x === 8 ? 'M ' : 'L ') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
       }
       const p = document.createElementNS(NS, 'path');
       p.setAttribute('d', d.trim());
@@ -981,7 +1603,7 @@ class Component extends DCLogic {
     const left = [], right = [];
     for (let k = 0; k <= SAMPLES; k++) {
       const u = k / SAMPLES;
-      const x = 95 + u * (W - 125);
+      const x = 8 + u * (W - 28);
       const y = this.baseHairY(u);
       const du = 1 / SAMPLES;
       const y2 = this.baseHairY(u + du);
@@ -1010,15 +1632,17 @@ class Component extends DCLogic {
     this.hairTravel = Math.max(1, HW * s - vw);
     this.hairSvg.setAttribute('width', HW * s);
     this.hairSvg.setAttribute('height', HH * s);
-    this.hairSvg.style.top = (vh / 2 - HH * s / 2) + 'px';
+    const isMobile = window.innerWidth <= 860;
+    const visualOffset = isMobile ? -Math.min(vh * 0.28, 180) : 0;
+    this.hairSvg.style.top = (vh / 2 - HH * s / 2 + visualOffset) + 'px';
     this.hairTrack.style.width = (HW * s) + 'px';
     this.hairSection.style.height = (vh + this.hairTravel * this.hairScrollFactor) + 'px';
 
-    const mid = vh / 2, gap = Math.max(64, vh * 0.10);
+    const mid = vh / 2 + visualOffset, gap = isMobile ? Math.max(84, vh * 0.12) : Math.max(64, vh * 0.10);
     this.hairCards.forEach(c => {
       const y = mid + (c.y - HH / 2) * s;
       const h = c.el.offsetHeight;
-      const TOP_SAFE = 104, BOT_SAFE = 56;
+      const TOP_SAFE = isMobile ? 148 : 104, BOT_SAFE = isMobile ? 72 : 56;
       let top = c.above ? y - gap - h : y + gap;
       const maxTop = vh - h - BOT_SAFE;
       top = maxTop < TOP_SAFE ? Math.max(8, (vh - h) / 2) : Math.min(Math.max(top, TOP_SAFE), maxTop);
@@ -1039,7 +1663,6 @@ class Component extends DCLogic {
     if (this.hairTween) { this.hairTween.scrollTrigger && this.hairTween.scrollTrigger.kill(); this.hairTween.kill(); }
     this.gsapReady = true;
     gsap.registerPlugin(ScrollTrigger);
-    if (window.innerWidth <= 860 && ScrollTrigger.config) ScrollTrigger.config({ ignoreMobileResize: true });
     this.hairTween = gsap.to(this.hairTrack, {
       x: () => -this.hairTravel,
       ease: 'none',
@@ -1290,4 +1913,5 @@ class Component extends DCLogic {
 
 </script>
 </body>
+
 </html>
