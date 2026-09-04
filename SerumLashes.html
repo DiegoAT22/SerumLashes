@@ -543,7 +543,7 @@
           <!-- z5 product tube — outside the scene wrapper so it keeps descending
            into the card-carousel act instead of scrolling up/fading with the rest -->
           <div class="dc-tube"
-            style="position: absolute; left: 50%; top: 50%; z-index: 11; --tube-w: clamp(132px, 10vw, 178px); width: var(--tube-w); transform: translate3d(calc(-50% + var(--ptr-fg-x, 0) * 1px), calc(-50% + (var(--tube-y, -70) + var(--ptr-fg-y, 0)) * 1px), 0) scale(var(--tube-scale, 1)); opacity: var(--tube-opacity, 1); will-change: transform, opacity;">
+            style="position: absolute; left: 50%; top: 50%; z-index: 11; --tube-w: clamp(132px, 10vw, 178px); width: var(--tube-w); transform: translate3d(calc(-50% + var(--ptr-fg-x, 0) * 1px), calc(-50% + (var(--tube-y, -900) + var(--ptr-fg-y, 0)) * 1px), 0) scale(var(--tube-scale, 1)); opacity: var(--tube-opacity, 0); will-change: transform, opacity;">
             <image-slot id="product" shape="rounded" radius="18" placeholder="product.png — tubo dorado"
               src="uploads/producto.webp" style="width: 100%; height: calc(var(--tube-w) * 3.1);"></image-slot>
           </div>
@@ -554,8 +554,8 @@
             <div ref="{{ setTrack }}"
               style="display: flex; gap: 32px; transform: translate3d(var(--cards-auto-x, 0px), 0, 0); will-change: transform; pointer-events: auto;">
               <sc-for list="{{ cardsLoop }}" as="card" hint-placeholder-count="9">
-                <div
-                  style="width: 400px; max-width: 82vw; height: 220px; flex-shrink: 0; background: #FDF1E1; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.16);">
+                <div class="hero-card"
+                  style="width: 400px; max-width: 82vw; height: 220px; flex-shrink: 0; background: #FDF1E1; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,0.16); cursor: zoom-in;">
                   <image-slot id="hero-card-{{ $index }}" shape="rect" fit="cover" placeholder="foto de producto"
                     src="{{ card }}" style="width: 100%; height: 100%;"></image-slot>
                 </div>
@@ -592,7 +592,8 @@
           Baja ↓</div>
       </section>
 
-      <section class="dc-routine" ref="{{ setRoutine }}" style="position: relative; height: 275svh; z-index: 2;">
+      <section class="dc-routine" ref="{{ setRoutine }}"
+        style="position: relative; height: 275svh; z-index: 2; background: #F7F6EA;">
         <div data-snap
           style="position: absolute; top: 11.25svh; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none;">
         </div>
@@ -710,7 +711,7 @@
 
       <!-- ═══ EL CICLO — scroll horizontal del pelo ═══ -->
       <section id="ciclo" ref="{{ setHair }}" data-hair
-        style="position: relative; height: 300vh; margin-top: -100svh; z-index: 1; background: #F7F6EA;">
+        style="position: relative; height: 300svh; margin-top: -100svh; z-index: 1; background: #F7F6EA;">
         <div data-hair-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
 
           <div
@@ -816,7 +817,7 @@
 
       <!-- ═══ RESULTADOS — carrusel horizontal de fotos ═══ -->
       <section id="resultados" ref="{{ setPhotos }}" data-photos
-        style="position: relative; height: 300vh; z-index: 1; background: #F7F6EA;">
+        style="position: relative; height: 300svh; z-index: 1; background: #F7F6EA;">
         <div data-photos-pin style="position: sticky; top: 0; height: 100svh; overflow: hidden; background: #F7F6EA;">
 
           <div
@@ -1090,6 +1091,15 @@
         </div>
       </section>
 
+      <!-- LIGHTBOX — foto ampliada del carrusel de la seccion hero -->
+      <div data-lightbox
+        style="position: fixed; inset: 0; z-index: 200; background: rgba(11,17,16,0.94); display: none; align-items: center; justify-content: center; padding: 32px; cursor: zoom-out;">
+        <img data-lightbox-img src="" alt="Foto ampliada"
+          style="max-width: 92vw; max-height: 88vh; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); object-fit: contain; cursor: default;">
+        <button data-lightbox-close aria-label="Cerrar"
+          style="position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(253,241,225,0.4); background: rgba(0,0,0,0.3); color: #FDF1E1; font-size: 20px; line-height: 1; cursor: pointer;">×</button>
+      </div>
+
     </div>
 
   </x-dc>
@@ -1248,6 +1258,43 @@ class Component extends DCLogic {
     this.running = true;
     this.raf = requestAnimationFrame(this.loop);
     this.frame(performance.now());
+
+    this.initLightbox();
+  }
+
+  initLightbox() {
+    this.lightboxEl = this.rootEl.querySelector('[data-lightbox]');
+    this.lightboxImgEl = this.rootEl.querySelector('[data-lightbox-img]');
+    const closeBtn = this.rootEl.querySelector('[data-lightbox-close]');
+    if (!this.lightboxEl || !this.lightboxImgEl) return;
+
+    this.openLightbox = (src) => {
+      if (!src) return;
+      this.lightboxImgEl.src = src;
+      this.lightboxEl.style.display = 'flex';
+      document.documentElement.style.overflow = 'hidden';
+    };
+    this.closeLightbox = () => {
+      this.lightboxEl.style.display = 'none';
+      this.lightboxImgEl.src = '';
+      document.documentElement.style.overflow = '';
+    };
+
+    this.onTrackClick = (e) => {
+      const card = e.target.closest('.hero-card');
+      if (!card || !this.trackEl || !this.trackEl.contains(card)) return;
+      const slot = card.querySelector('image-slot');
+      const src = slot && slot.getAttribute('src');
+      if (src) this.openLightbox(src);
+    };
+    if (this.trackEl) this.trackEl.addEventListener('click', this.onTrackClick);
+
+    this.onLightboxBackdrop = (e) => { if (e.target === this.lightboxEl) this.closeLightbox(); };
+    this.lightboxEl.addEventListener('click', this.onLightboxBackdrop);
+    if (closeBtn) closeBtn.addEventListener('click', this.closeLightbox);
+
+    this.onLightboxKey = (e) => { if (e.key === 'Escape') this.closeLightbox(); };
+    window.addEventListener('keydown', this.onLightboxKey);
   }
 
   componentWillUnmount() {
@@ -1259,6 +1306,9 @@ class Component extends DCLogic {
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('orientationchange', this.onOrient);
+    if (this.trackEl && this.onTrackClick) this.trackEl.removeEventListener('click', this.onTrackClick);
+    if (this.lightboxEl && this.onLightboxBackdrop) this.lightboxEl.removeEventListener('click', this.onLightboxBackdrop);
+    if (this.onLightboxKey) window.removeEventListener('keydown', this.onLightboxKey);
   }
 
   setVar(k, v) {
