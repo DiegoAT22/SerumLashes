@@ -1598,6 +1598,38 @@ class Component extends DCLogic {
     b.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
     b.textContent = open ? '×' : '☰';
   }
+
+  /* ── Scroll fiable hacia secciones con ScrollTrigger ── */
+  function scrollToSection(hash) {
+    var id = hash.replace('#', '');
+    var target = document.getElementById(id);
+    if (!target) return;
+
+    // Altura del header fijo
+    var header = document.querySelector('.dc-header');
+    var offset = header ? header.offsetHeight + 4 : 80;
+
+    // Posición real de la sección
+    var rect = target.getBoundingClientRect();
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    var top = rect.top + scrollY - offset;
+
+    window.scrollTo({ top: top, behavior: 'smooth' });
+
+    // Después de la animación de scroll, refresca ScrollTrigger
+    // para que las animaciones pinned/sticky arranquen correctamente.
+    setTimeout(function () {
+      window.dispatchEvent(new Event('scroll'));
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    }, 600);
+
+    // Segundo refresh para asegurar que todo está sincronizado
+    setTimeout(function () {
+      window.dispatchEvent(new Event('scroll'));
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    }, 1200);
+  }
+
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('.dc-menu-toggle');
     if (b) {
@@ -1606,17 +1638,16 @@ class Component extends DCLogic {
       return;
     }
     var link = e.target.closest && e.target.closest('.dc-nav a');
-    if (link && window.innerWidth <= 860) {
-      setOpen(false);
-      // Al entrar a "El ciclo", fuerza un frame de actualización después
-      // del salto para que la animación horizontal arranque de inmediato.
-      if (link.getAttribute('href') === '#ciclo') {
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            window.dispatchEvent(new Event('scroll'));
-            if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-          });
-        });
+    if (link) {
+      var href = link.getAttribute('href');
+      if (href && href.charAt(0) === '#') {
+        e.preventDefault();
+        setOpen(false);
+        // Pequeño delay para dejar que el menú cierre antes de scrollear
+        setTimeout(function () {
+          scrollToSection(href);
+        }, 320);
+        return;
       }
     }
     var n = nav();
