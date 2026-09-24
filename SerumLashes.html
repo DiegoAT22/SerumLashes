@@ -14,6 +14,7 @@
   <script src="./image-slot.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollToPlugin.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Prata&display=swap" rel="stylesheet" />
   <style>
@@ -1609,25 +1610,23 @@ class Component extends DCLogic {
     var header = document.querySelector('.dc-header');
     var offset = header ? header.offsetHeight + 4 : 80;
 
-    // Posición real de la sección
-    var rect = target.getBoundingClientRect();
-    var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-    var top = rect.top + scrollY - offset;
-
-    window.scrollTo({ top: top, behavior: 'smooth' });
-
-    // Después de la animación de scroll, refresca ScrollTrigger
-    // para que las animaciones pinned/sticky arranquen correctamente.
-    setTimeout(function () {
-      window.dispatchEvent(new Event('scroll'));
-      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-    }, 600);
-
-    // Segundo refresh para asegurar que todo está sincronizado
-    setTimeout(function () {
-      window.dispatchEvent(new Event('scroll'));
-      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-    }, 1200);
+    // Usar GSAP ScrollToPlugin — es el único método fiable para
+    // navegar en páginas con ScrollTrigger pinned/sticky.
+    if (window.gsap && gsap.plugins && gsap.plugins.scrollTo) {
+      gsap.to(window, {
+        duration: 1,
+        scrollTo: { y: target, offsetY: offset },
+        ease: 'power2.inOut',
+        onComplete: function () {
+          if (window.ScrollTrigger) ScrollTrigger.refresh();
+        }
+      });
+    } else {
+      // Fallback: scroll nativo
+      var rect = target.getBoundingClientRect();
+      var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({ top: rect.top + scrollY - offset, behavior: 'smooth' });
+    }
   }
 
   document.addEventListener('click', function (e) {
