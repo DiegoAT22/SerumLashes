@@ -807,7 +807,7 @@ class Component extends DCLogic {
     let braking = false, last = 0, raf = 0;
     const stop = () => { braking = false; if (raf) cancelAnimationFrame(raf); raf = 0; };
     const tick = () => {
-      if (!braking) return;
+      if (!braking || window.__dcNavScrolling) return;
       const y = root.scrollTop;
       const d = y - last;
       if (Math.abs(d) > MAX) { root.scrollTop = last + Math.sign(d) * MAX; }
@@ -815,11 +815,20 @@ class Component extends DCLogic {
       raf = requestAnimationFrame(tick);
     };
     this._brakeOn = () => { stop(); braking = false; };
+    window.__dcStopBrake = stop;
     const onStart = () => { stop(); };
-    const onEnd = () => { braking = true; last = root.scrollTop; raf = requestAnimationFrame(tick); setTimeout(stop, 1400); };
+    const onEnd = () => {
+      if (window.__dcNavScrolling) return;
+      braking = true; last = root.scrollTop; raf = requestAnimationFrame(tick); setTimeout(stop, 1400);
+    };
     window.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchend', onEnd, { passive: true });
-    this._brakeCleanup = () => { stop(); window.removeEventListener('touchstart', onStart); window.removeEventListener('touchend', onEnd); };
+    this._brakeCleanup = () => {
+      stop();
+      delete window.__dcStopBrake;
+      window.removeEventListener('touchstart', onStart);
+      window.removeEventListener('touchend', onEnd);
+    };
   }
 
   componentDidMount() {
@@ -1600,33 +1609,85 @@ class Component extends DCLogic {
     b.textContent = open ? '×' : '☰';
   }
 
-  /* ── Scroll fiable hacia secciones con ScrollTrigger ── */
+  /* ── Scroll fluido hacia secciones (Móvil y Desktop) ── */
   function scrollToSection(hash) {
-    var id = hash.replace('#', '');
-    var target = document.getElementById(id);
-    if (!target) return;
-
-    // Altura del header fijo
-    var header = document.querySelector('.dc-header');
-    var offset = header ? header.offsetHeight + 4 : 80;
-
-    // Usar GSAP ScrollToPlugin — es el único método fiable para
-    // navegar en páginas con ScrollTrigger pinned/sticky.
-    if (window.gsap && gsap.plugins && gsap.plugins.scrollTo) {
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: { y: target, offsetY: offset },
-        ease: 'power2.inOut',
-        onComplete: function () {
-          if (window.ScrollTrigger) ScrollTrigger.refresh();
-        }
-      });
-    } else {
-      // Fallback: scroll nativo
-      var rect = target.getBoundingClientRect();
-      var scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      window.scrollTo({ top: rect.top + scrollY - offset, behavior: 'smooth' });
+    if (typeof window.__dcStopBrake === 'function') {
+      window.__dcStopBrake();
     }
+    window.__dcNavScrolling = true;
+
+    var id = hash ? hash.replace('#', '') : '';
+    var destino = 0;
+
+    if (id && id !== 'scroll-rig') {
+      var target = document.getElementById(id);
+      if (!target) {
+        window.__dcNavScrolling = false;
+        return;
+      }
+      var header = document.querySelector('.dc-header');
+      var offset = header ? header.offsetHeight + 10 : 80;
+      var rect = target.getBoundingClientRect();
+      var scrollY = window.pageYOffset || document.documentElement.scrollTop || (document.body && document.body.scrollTop) || 0;
+      destino = Math.max(0, rect.top + scrollY - offset);
+    }
+
+    var inicio = window.pageYOffset || document.documentElement.scrollTop || (document.body && document.body.scrollTop) || 0;
+    var diferencia = destino - inicio;
+
+    if (Math.abs(diferencia) < 5) {
+      window.__dcNavScrolling = false;
+      return;
+    }
+
+    var duracion = Math.min(850, Math.max(380, Math.abs(diferencia) * 0.32));
+    var startTime = null;
+    var animId = null;
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function cancelNav() {
+      if (animId) cancelAnimationFrame(animId);
+      window.__dcNavScrolling = false;
+      removeListeners();
+    }
+
+    function removeListeners() {
+      window.removeEventListener('touchstart', cancelNav);
+      window.removeEventListener('wheel', cancelNav);
+    }
+
+    window.addEventListener('touchstart', cancelNav, { passive: true, once: true });
+    window.addEventListener('wheel', cancelNav, { passive: true, once: true });
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var elapsed = ts - startTime;
+      var progress = Math.min(elapsed / duracion, 1);
+      var eased = easeInOutCubic(progress);
+      var nextY = inicio + diferencia * eased;
+
+      window.scrollTo(0, nextY);
+      var root = document.scrollingElement || document.documentElement;
+      if (root) root.scrollTop = nextY;
+
+      if (progress < 1) {
+        animId = requestAnimationFrame(step);
+      } else {
+        removeListeners();
+        window.scrollTo(0, destino);
+        if (root) root.scrollTop = destino;
+        setTimeout(function () {
+          window.__dcNavScrolling = false;
+          window.dispatchEvent(new Event('scroll'));
+          if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        }, 50);
+      }
+    }
+
+    animId = requestAnimationFrame(step);
   }
 
   document.addEventListener('click', function (e) {
@@ -1642,10 +1703,9 @@ class Component extends DCLogic {
       if (href && href.charAt(0) === '#') {
         e.preventDefault();
         setOpen(false);
-        // Pequeño delay para dejar que el menú cierre antes de scrollear
         setTimeout(function () {
           scrollToSection(href);
-        }, 320);
+        }, 150);
         return;
       }
     }
